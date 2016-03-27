@@ -43,7 +43,7 @@
     XCTAssert(app.otherElements[@"No Actions Warning View"].hittable);
 }
 
-- (void)testAddGroups
+- (void)testAddActions
 {
     XCUIApplication *app = [[XCUIApplication alloc] init];
     [app.switches[@"Test Action Overlay Switch"] tap];
@@ -119,6 +119,128 @@
      @"Action22",
      @"Action222",
      @"Action23",
+     nil];
+}
+
+- (void)testFilter
+{
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.switches[@"Test Action Overlay Switch"] tap];
+    
+    [self app:app addActions:@{
+       @"Group2" : @[@"Action1", @"Action11", @"Action2"],
+       @"Group1" : @[@"Action1", @"Action11"],
+       @"" : @[@"Action2", @"Action1", @"Action3"]
+    }];
+    
+    [self appOpenActionsController:app];
+    
+    XCUIElement *table = app.tables.element;
+    [self asserTable:table,
+     @"Action1",
+     @"Action2",
+     @"Action3",
+     @"Group1",
+     @"Action1",
+     @"Action11",
+     @"Group2",
+     @"Action1",
+     @"Action11",
+     @"Action2",
+     nil];
+    
+    XCUIElement *filterSearchField = app.searchFields[@"Filter"];
+    [filterSearchField tap];
+    
+    [filterSearchField typeText:@"Action1"];
+    [self app:app tapButton:@"Search"];
+    
+    [self app:app addGroup:@"" action:@"Foo"];
+    
+    [self asserTable:table, // filter text 'Action1'
+     @"Action1",
+     @"Group1",
+     @"Action1",
+     @"Action11",
+     @"Group2",
+     @"Action1",
+     @"Action11",
+     nil];
+    
+    [filterSearchField tap];
+    [filterSearchField typeText:@"1"];
+    [self asserTable:table, // filter text 'Action11'
+     @"Group1",
+     @"Action11",
+     @"Group2",
+     @"Action11",
+     nil];
+    
+    [self app:app tapButton:@"Search"];
+    [self app:app addGroup:@"" action:@"Action11"];
+    
+    [self asserTable:table, // filter text 'Action11'
+     @"Action11",
+     @"Group1",
+     @"Action11",
+     @"Group2",
+     @"Action11",
+     nil];
+    
+    [filterSearchField tap];
+    [filterSearchField typeText:@"1"];
+    [self asserTable:table, nil]; // filter text 'Action111'
+    
+    [self appDeleteChar:app];
+    [self asserTable:table, // filter text 'Action11'
+     @"Action11",
+     @"Group1",
+     @"Action11",
+     @"Group2",
+     @"Action11",
+     nil];
+    
+    [self appDeleteChar:app];
+    [self asserTable:table, // filter text 'Action1'
+     @"Action1",
+     @"Action11",
+     @"Group1",
+     @"Action1",
+     @"Action11",
+     @"Group2",
+     @"Action1",
+     @"Action11",
+     nil];
+    
+    [self appDeleteChar:app];
+    [self asserTable:table, // filter text 'Action'
+     @"Action1",
+     @"Action11",
+     @"Action2",
+     @"Action3",
+     @"Group1",
+     @"Action1",
+     @"Action11",
+     @"Group2",
+     @"Action1",
+     @"Action11",
+     @"Action2",
+     nil];
+    
+    [self appDeleteText:app];
+    [self asserTable:table,
+     @"Action1",
+     @"Action11",
+     @"Action2",
+     @"Action3",
+     @"Foo",
+     @"Group1",
+     @"Action1",
+     @"Action11",
+     @"Group2",
+     @"Action1",
+     @"Action11",
+     @"Action2",
      nil];
 }
 

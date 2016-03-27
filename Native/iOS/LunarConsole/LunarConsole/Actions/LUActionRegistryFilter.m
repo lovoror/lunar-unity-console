@@ -256,11 +256,19 @@
             return;
         }
         
+        NSUInteger oldFilteredGroupCount = _filteredGroups.count;
+        
         LUActionGroup *group = [registry.groups objectAtIndex:groupIndex];
         groupIndex = [self addFilteredGroup:group];
         
         LUActionGroup *filteredGroup = [_filteredGroups objectAtIndex:groupIndex];
         index = [filteredGroup addAction:action];
+        
+        if (_filteredGroups.count > oldFilteredGroupCount) // check if filtered group did not exist before adding the action
+        {
+            [_delegate actionRegistryFilter:self didAddGroup:filteredGroup atIndex:groupIndex];
+            return;
+        }
     }
     
     [_delegate actionRegistryFilter:self didAddAction:action atIndex:index groupIndex:groupIndex];
