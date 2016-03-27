@@ -26,21 +26,24 @@
 static const NSTimeInterval kWindowAnimationDuration = 0.4f;
 static const CGFloat kWarningHeight = 45.0f;
 
-@interface LUConsolePlugin () <LUConsoleControllerDelegate, LUExceptionWarningControllerDelegate>
+@interface LUConsolePlugin () <LUConsolePluginControllerDelegate, LUExceptionWarningControllerDelegate>
 {
-    NSString            * _version;
-    LUConsole           * _console;
-    LUWindow            * _consoleWindow;
-    LUWindow            * _warningWindow;
-    UIGestureRecognizer * _gestureRecognizer;
-    LUConsoleGesture      _gesture;
+    LUUnityScriptMessenger  * _scriptMessenger;
+    NSString                * _version;
+    UIGestureRecognizer     * _gestureRecognizer;
+    LUConsoleGesture          _gesture;
 }
 
 @end
 
 @implementation LUConsolePlugin
 
-- (instancetype)initWithVersion:(NSString *)version capacity:(NSUInteger)capacity trimCount:(NSUInteger)trimCount gestureName:(NSString *)gestureName
+- (instancetype)initWithTargetName:(NSString *)targetName
+                        methodName:(NSString *)methodName
+                           version:(NSString *)version
+                          capacity:(NSUInteger)capacity
+                         trimCount:(NSUInteger)trimCount
+                       gestureName:(NSString *)gestureName
 {
     self = [super init];
     if (self)
@@ -54,8 +57,10 @@ static const CGFloat kWarningHeight = 45.0f;
             return nil;
         }
         
+        _scriptMessenger = [[LUUnityScriptMessenger alloc] initWithTargetName:targetName methodName:methodName];
         _version = LU_RETAIN(version);
         _console = [[LUConsole alloc] initWithCapacity:capacity trimCount:trimCount];
+        _actionRegistry = [[LUActionRegistry alloc] init];
         _gesture = [self gestureFromString:gestureName];
     }
     return self;
@@ -65,8 +70,10 @@ static const CGFloat kWarningHeight = 45.0f;
 {
     [self disableGestureRecognition];
     
+    LU_RELEASE(_scriptMessenger);
     LU_RELEASE(_version);
     LU_RELEASE(_console);
+    LU_RELEASE(_actionRegistry);
     LU_RELEASE(_consoleWindow);
     LU_RELEASE(_warningWindow);
     LU_RELEASE(_gestureRecognizer);
@@ -82,8 +89,7 @@ static const CGFloat kWarningHeight = 45.0f;
     LUAssert(_consoleWindow == nil);
     if (_consoleWindow == nil)
     {
-        LUConsoleController *controller = [LUConsoleController controllerWithConsole:_console];
-        controller.version = _version;
+        LUConsolePluginController *controller = [LUConsolePluginController controllerWithPlugin:self];
         controller.delegate = self;
         
         CGRect windowFrame = LUGetScreenBounds();
@@ -146,6 +152,19 @@ static const CGFloat kWarningHeight = 45.0f;
 }
 
 #pragma mark -
+#pragma mark Actions
+
+- (void)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group
+{
+    [_actionRegistry registerActionWithId:actionId name:name group:group];
+}
+
+- (void)unregisterActionWithId:(int)actionId
+{
+    [_actionRegistry unregisterActionWithId:actionId];
+}
+
+#pragma mark -
 #pragma mark Warnings
 
 - (BOOL)showWarningWithMessage:(NSString *)message
@@ -199,27 +218,27 @@ static const CGFloat kWarningHeight = 45.0f;
 #pragma mark -
 #pragma mark LUConsoleControllerEntrySource
 
-- (NSInteger)consoleControllerNumberOfEntries:(LUConsoleController *)controller
+- (NSInteger)consoleControllerNumberOfEntries:(LUConsoleLogController *)controller
 {
     return _console.entriesCount;
 }
 
-- (LUConsoleEntry *)consoleController:(LUConsoleController *)controller entryAtIndex:(NSUInteger)index
+- (LUConsoleLogEntry *)consoleController:(LUConsoleLogController *)controller entryAtIndex:(NSUInteger)index
 {
     return [_console entryAtIndex:index];
 }
 
 #pragma mark -
-#pragma mark LUConsoleControllerDelegate
+#pragma mark LUConsolePluginControllerDelegate
 
-- (void)consoleControllerDidClose:(LUConsoleController *)controller
+- (void)pluginController:(LUConsolePluginController *)controller didSelectActionWithId:(int)actionId
 {
-    [self hide];
+    NSLog(@"Selected action: %d", actionId);
 }
 
-- (void)consoleControllerDidClear:(LUConsoleController *)controller
+- (void)pluginControllerDidClose:(LUConsolePluginController *)controller
 {
-    [_console clear];
+    [self hide];
 }
 
 #pragma mark -

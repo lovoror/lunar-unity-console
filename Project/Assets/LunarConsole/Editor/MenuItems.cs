@@ -23,7 +23,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace LunarConsoleInternal
+namespace LunarConsolePluginInternal
 {
     static class MenuItems
     {
@@ -37,6 +37,12 @@ namespace LunarConsoleInternal
         [MenuItem("Window/Lunar Mobile Console/")]
         static void Separator()
         {
+        }
+
+        [MenuItem("Window/Lunar Mobile Console/Quick Actions...")]
+        static void QuickActions()
+        {
+            EditorWindow.GetWindow<QuickActionWindow>();
         }
 
         [MenuItem("Window/Lunar Mobile Console/Check for updates...")]

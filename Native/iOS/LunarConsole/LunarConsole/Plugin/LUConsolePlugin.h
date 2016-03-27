@@ -22,7 +22,11 @@
 #import <Foundation/Foundation.h>
 
 #import "LUObject.h"
-#import "LUConsoleEntry.h"
+#import "LUConsoleLogEntry.h"
+
+@class LUActionRegistry;
+@class LUConsole;
+@class LUWindow;
 
 typedef enum : NSUInteger {
     LUConsoleGestureNone,
@@ -31,16 +35,29 @@ typedef enum : NSUInteger {
 
 @interface LUConsolePlugin : LUObject
 
+@property (nonatomic, readonly) LUWindow         * consoleWindow;
+@property (nonatomic, readonly) LUWindow         * warningWindow;
+@property (nonatomic, readonly) LUConsole        * console;
+@property (nonatomic, readonly) LUActionRegistry * actionRegistry;
+
 @property (nonatomic, assign) NSInteger capacity;
 @property (nonatomic, assign) NSInteger trim;
 
-- (instancetype)initWithVersion:(NSString *)version capacity:(NSUInteger)capacity trimCount:(NSUInteger)trimCount gestureName:(NSString *)gestureName;
+- (instancetype)initWithTargetName:(NSString *)targetName
+                        methodName:(NSString *)methodName
+                           version:(NSString *)version
+                          capacity:(NSUInteger)capacity
+                         trimCount:(NSUInteger)trimCount
+                       gestureName:(NSString *)gestureName;
 
 - (void)show;
 - (void)hide;
 
 - (void)logMessage:(NSString *)message stackTrace:(NSString *)stackTrace type:(LUConsoleLogType)type;
 - (void)clear;
+
+- (void)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group;
+- (void)unregisterActionWithId:(int)actionId;
 
 - (void)enableGestureRecognition;
 - (void)disableGestureRecognition;

@@ -20,6 +20,7 @@
 //
 
 #import "ViewController.h"
+#import "ActionOverlayView.h"
 
 #import "Lunar.h"
 #import "FakeLogEntry.h"
@@ -27,15 +28,25 @@
 static const NSUInteger kConsoleCapacity  = 4096;
 static const NSUInteger kConsoleTrimCount = 512;
 
+static const CGFloat kActionOverlayViewWidth = 186.0;
+static const CGFloat kActionOverlayViewHeight = 47.0;
+
+static __weak LUConsolePlugin * _pluginInstance;
+
+void UnitySendMessage(const char *objectName, const char *methodName, const char *message)
+{
+    NSLog(@"Send native message: %s.%s(%s)", objectName, methodName, message);
+}
+
 @interface ViewController () <UITextFieldDelegate>
 {
-    LUConsolePlugin * _plugin;
     NSUInteger _index;
 }
 
-@property (nonatomic, weak) IBOutlet UITextField *messageText;
-@property (nonatomic, weak) IBOutlet UITextField *capacityText;
-@property (nonatomic, weak) IBOutlet UITextField *trimText;
+@property (nonatomic, weak) IBOutlet UITextField * messageText;
+@property (nonatomic, weak) IBOutlet UITextField * capacityText;
+@property (nonatomic, weak) IBOutlet UITextField * trimText;
+@property (nonatomic, weak) IBOutlet UISwitch    * actionOverlaySwitch;
 
 @property (nonatomic, strong) NSArray * logEntries;
 
@@ -45,6 +56,7 @@ static const NSUInteger kConsoleTrimCount = 512;
 
 - (void)dealloc
 {
+    _pluginInstance = nil;
     LU_RELEASE(_plugin);
     LU_SUPER_DEALLOC
 }
@@ -53,18 +65,22 @@ static const NSUInteger kConsoleTrimCount = 512;
 {
     [super viewDidLoad];
     
-    _plugin = [[LUConsolePlugin alloc] initWithVersion:@"0.0.0b"
-                                              capacity:kConsoleCapacity
-                                             trimCount:kConsoleTrimCount
-                                           gestureName:@"SwipeDown"];
+    _plugin = [[LUConsolePlugin alloc] initWithTargetName:@"LunarConsole"
+                                               methodName:@"OnNativeMessage"
+                                                  version:@"0.0.0b"
+                                                 capacity:kConsoleCapacity
+                                                trimCount:kConsoleTrimCount
+                                              gestureName:@"SwipeDown"];
     
-    _capacityText.text = [NSString stringWithFormat:@"%d", kConsoleCapacity];
-    _trimText.text = [NSString stringWithFormat:@"%d", kConsoleTrimCount];
+    _capacityText.text = [NSString stringWithFormat:@"%ld", (long) kConsoleCapacity];
+    _trimText.text = [NSString stringWithFormat:@"%ld", (long) kConsoleTrimCount];
+    
+    _pluginInstance = _plugin;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
 }
 
 #pragma mark -
@@ -123,12 +139,61 @@ static const NSUInteger kConsoleTrimCount = 512;
     }
 }
 
+- (IBAction)onToggleOverlaySwitch:(id)sender
+{
+    UISwitch *swtch = sender;
+    if (swtch.isOn)
+    {
+        [self addOverlayViewToWindow:[UIApplication sharedApplication].keyWindow];
+    }
+    else
+    {
+        [self removeOverlayViewFromWindow:[UIApplication sharedApplication].keyWindow];
+    }
+}
+
 #pragma mark -
 #pragma mark Helpers
 
 - (void)showConsoleController
 {
+    [self removeOverlayViewFromWindow:[UIApplication sharedApplication].keyWindow];
+    
     [_plugin show];
+    
+    UIWindow *window = _plugin.consoleWindow;
+    [self removeOverlayViewFromWindow:window];
+    
+    if (_actionOverlaySwitch.isOn)
+    {
+        [self addOverlayViewToWindow:window];
+    }
+}
+
+- (void)addOverlayViewToWindow:(UIWindow *)window
+{
+    CGSize windowSize = window.frame.size;
+    CGRect frame = CGRectMake(
+          0,
+          windowSize.height - kActionOverlayViewHeight,
+          kActionOverlayViewWidth,
+          kActionOverlayViewHeight
+    );
+    ActionOverlayView *overlayView = [[ActionOverlayView alloc] initWithFrame:frame];
+    [window addSubview:overlayView];
+    LU_RELEASE(overlayView);
+}
+
+- (void)removeOverlayViewFromWindow:(UIWindow *)window
+{
+    for (UIView *view in window.subviews)
+    {
+        if ([view isKindOfClass:[ActionOverlayView class]])
+        {
+            [view removeFromSuperview];
+            break;
+        }
+    }
 }
 
 - (void)showAlert
@@ -207,6 +272,14 @@ static const NSUInteger kConsoleTrimCount = 512;
 {
     [textField resignFirstResponder];
     return NO;
+}
+
+#pragma mark -
+#pragma mark Properties
+
++ (LUConsolePlugin *)pluginInstance
+{
+    return _pluginInstance;
 }
 
 @end

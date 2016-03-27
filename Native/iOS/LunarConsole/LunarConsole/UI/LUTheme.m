@@ -48,6 +48,16 @@ static LUTheme * _mainTheme;
 @property (nonatomic, strong) UIColor *collapseBackgroundColor;
 @property (nonatomic, strong) UIColor *collapseTextColor;
 
+@property (nonatomic, strong) UIFont  *actionsWarningFont;
+@property (nonatomic, strong) UIColor *actionsWarningTextColor;
+@property (nonatomic, strong) UIFont  *actionsFont;
+@property (nonatomic, strong) UIColor *actionsTextColor;
+@property (nonatomic, strong) UIColor *actionsBackgroundColorLight;
+@property (nonatomic, strong) UIColor *actionsBackgroundColorDark;
+@property (nonatomic, strong) UIFont  *actionsGroupFont;
+@property (nonatomic, strong) UIColor *actionsGroupTextColor;
+@property (nonatomic, strong) UIColor *actionsGroupBackgroundColor;
+
 @property (nonatomic, strong) UIFont  *contextMenuFont;
 @property (nonatomic, strong) UIColor *contextMenuBackgroundColor;
 @property (nonatomic, strong) UIColor *contextMenuTextColor;
@@ -123,8 +133,8 @@ static UIImage * CreateCollapseBackgroundImage()
         _mainTheme.cellLog = cellLog;
         _mainTheme.cellError = cellError;
         _mainTheme.cellWarning = cellWarning;
-        _mainTheme.font = [self createDefaultFont];
-        _mainTheme.fontSmall = [self createSmallFont];
+        _mainTheme.font = [self createCustomFontWithSize:10];
+        _mainTheme.fontSmall = [self createCustomFontWithSize:8];
         _mainTheme.lineBreakMode = NSLineBreakByWordWrapping;
         _mainTheme.cellHeight = 32;
         _mainTheme.indentHor = 10;
@@ -134,7 +144,16 @@ static UIImage * CreateCollapseBackgroundImage()
         _mainTheme.collapseBackgroundImage = CreateCollapseBackgroundImage();
         _mainTheme.collapseBackgroundColor = UIColorMake(0x424242);
         _mainTheme.collapseTextColor = cellLog.textColor;
-        _mainTheme.contextMenuFont = [self createContextMenuFont];
+        _mainTheme.actionsWarningFont = [UIFont systemFontOfSize:18];
+        _mainTheme.actionsWarningTextColor = cellLog.textColor;
+        _mainTheme.actionsFont = [self createCustomFontWithSize:12];
+        _mainTheme.actionsTextColor = cellLog.textColor;
+        _mainTheme.actionsBackgroundColorDark = cellLog.backgroundColorDark;
+        _mainTheme.actionsBackgroundColorLight = cellLog.backgroundColorLight;
+        _mainTheme.actionsGroupFont = [self createCustomFontWithSize:12];
+        _mainTheme.actionsGroupTextColor = [UIColor whiteColor];
+        _mainTheme.actionsGroupBackgroundColor = UIColorMake(0x262626);
+        _mainTheme.contextMenuFont = [self createCustomFontWithSize:12];
         _mainTheme.contextMenuBackgroundColor = UIColorMake(0x3c3c3c);
         _mainTheme.contextMenuTextColor = cellLog.textColor;
         _mainTheme.contextMenuTextHighlightColor = [UIColor whiteColor];
@@ -154,6 +173,15 @@ static UIImage * CreateCollapseBackgroundImage()
     LU_RELEASE(_collapseBackgroundImage);
     LU_RELEASE(_collapseBackgroundColor);
     LU_RELEASE(_collapseTextColor);
+    LU_RELEASE(_actionsWarningFont);
+    LU_RELEASE(_actionsWarningTextColor);
+    LU_RELEASE(_actionsFont);
+    LU_RELEASE(_actionsTextColor);
+    LU_RELEASE(_actionsBackgroundColorDark);
+    LU_RELEASE(_actionsBackgroundColorLight);
+    LU_RELEASE(_actionsGroupFont);
+    LU_RELEASE(_actionsGroupTextColor);
+    LU_RELEASE(_actionsGroupBackgroundColor);
     LU_RELEASE(_contextMenuFont);
     LU_RELEASE(_contextMenuBackgroundColor);
     LU_RELEASE(_contextMenuTextColor);
@@ -162,37 +190,15 @@ static UIImage * CreateCollapseBackgroundImage()
     LU_SUPER_DEALLOC
 }
 
-+ (UIFont *)createDefaultFont
++ (UIFont *)createCustomFontWithSize:(CGFloat)size
 {
-    UIFont *font = [UIFont fontWithName:@"Menlo-regular" size:10];
+    UIFont *font = [UIFont fontWithName:@"Menlo-regular" size:size];
     if (font != nil)
     {
         return font;
     }
     
-    return [UIFont systemFontOfSize:10];
-}
-
-+ (UIFont *)createSmallFont
-{
-    UIFont *font = [UIFont fontWithName:@"Menlo-regular" size:8];
-    if (font != nil)
-    {
-        return font;
-    }
-    
-    return [UIFont systemFontOfSize:8];
-}
-
-+ (UIFont *)createContextMenuFont
-{
-    UIFont *font = [UIFont fontWithName:@"Menlo-regular" size:12];
-    if (font != nil)
-    {
-        return font;
-    }
-    
-    return [UIFont systemFontOfSize:12];
+    return [UIFont systemFontOfSize:size];
 }
 
 + (LUTheme *)mainTheme

@@ -21,6 +21,10 @@
 
 #define LUNAR_CONSOLE_ENABLED
 
+#if UNITY_IOS || UNITY_IPHONE || UNITY_ANDROID
+#define LUNAR_CONSOLE_PLATFORM_SUPPORTED
+#endif
+
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -31,15 +35,17 @@ using System.Runtime.CompilerServices;
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
-using LunarConsoleInternal;
+using LunarConsolePluginInternal;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Test")]
 #endif
 
-namespace LunarConsole
+namespace LunarConsolePlugin
 {
     public enum Gesture
     {
@@ -47,23 +53,47 @@ namespace LunarConsole
         SwipeDown
     }
 
+    delegate void LunarConsoleNativeMessageCallback(string message);
+
     public class LunarConsole : MonoBehaviour
     {
+        #pragma warning disable 0649
+        #pragma warning disable 0414
+
         [Range(128, 65536)]
         [Tooltip("Logs will be trimmed to the capacity")]
-        public int capacity = 4096;
+        [SerializeField]
+        int m_capacity = 4096;
 
         [Range(128, 65536)]
         [Tooltip("How many logs will be trimmed when console overflows")]
-        public int trim = 512;
+        [SerializeField]
+        int m_trim = 512;
 
         [Tooltip("Gesture type to open the console")]
-        public Gesture gesture = Gesture.SwipeDown;
+        [SerializeField]
+        Gesture m_gesture = Gesture.SwipeDown;
+
+        static LunarConsole s_instance;
+        static QuickActionRegistry s_actionRegistry;
+
+        #pragma warning restore 0649
+        #pragma warning restore 0414
 
         #if LUNAR_CONSOLE_ENABLED
 
-        private static LunarConsole instance;
-        private IPlatform platform;
+        IPlatform m_platform;
+
+        #region Static initialization
+
+        static LunarConsole()
+        {
+            s_actionRegistry = new QuickActionRegistry();
+        }
+
+        #endregion
+
+        #region Life cycle
 
         void Awake()
         {
@@ -77,11 +107,11 @@ namespace LunarConsole
 
         void InitInstance()
         {
-            if (instance == null)
+            if (s_instance == null)
             {
-                if (InitPlatform(capacity, trim))
+                if (InitPlatform(m_capacity, m_trim))
                 {
-                    instance = this;
+                    s_instance = this;
                     DontDestroyOnLoad(gameObject);
                 }
                 else
@@ -89,51 +119,32 @@ namespace LunarConsole
                     Destroy(gameObject);
                 }
             }
-            else if (instance != this)
+            else if (s_instance != this)
             {
                 Destroy(gameObject);
             }
         }
 
-        void ShowConsole()
-        {
-            if (platform != null)
-            {
-                platform.ShowConsole();
-            }
-        }
+        #endregion
 
-        void HideConsole()
-        {
-            if (platform != null)
-            {
-                platform.HideConsole();
-            }
-        }
-
-        void ClearConsole()
-        {
-            if (platform != null)
-            {
-                platform.ClearConsole();
-            }
-        }
+        #region Platforms
 
         bool InitPlatform(int capacity, int trim)
         {
             try
             {
-                if (platform == null)
+                if (m_platform == null)
                 {
                     trim = Math.Min(trim, capacity); // can't trim more that we have
 
-                    platform = CreatePlatform(capacity, trim);
-                    if (platform != null)
+                    m_platform = CreatePlatform(capacity, trim);
+                    if (m_platform != null)
                     {
                         Application.logMessageReceived += delegate(string message, string stackTrace, LogType type) {
-                            platform.OnLogMessageReceived(message, stackTrace, type);
+                            m_platform.OnLogMessageReceived(message, stackTrace, type);
                         };
 
+                        RegisterPlatformActions(m_platform);
                         return true;
                     }
                 }
@@ -146,17 +157,32 @@ namespace LunarConsole
             return false;
         }
 
+        void RegisterPlatformActions(IPlatform platform)
+        {
+            foreach (var group in s_actionRegistry.actionGroups)
+            {
+                foreach (var action in group.actions)
+                {
+                    platform.AddAction(action);
+                }
+            }
+
+            s_actionRegistry.registryDelegate = new PlatformActionRegistryDelegate(platform);
+        }
+
         IPlatform CreatePlatform(int capacity, int trim)
         {
             #if UNITY_IOS || UNITY_IPHONE
             if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                return new PlatformIOS(Constants.Version, capacity, trim, GetGestureName(gesture));
+                LunarConsoleNativeMessageCallback callback = OnNativeMessage;
+                return new PlatformIOS(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(m_gesture));
             }
             #elif UNITY_ANDROID
             if (Application.platform == RuntimePlatform.Android)
             {
-                return new PlatformAndroid(Constants.Version, capacity, trim, GetGestureName(gesture));
+                LunarConsoleNativeMessageCallback callback = OnNativeMessage;
+                return new PlatformAndroid(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(gesture));
             }
             #endif
 
@@ -174,6 +200,9 @@ namespace LunarConsole
             bool ShowConsole();
             bool HideConsole();
             void ClearConsole();
+
+            void AddAction(QuickAction action);
+            void RemoveAction(QuickAction action);
         }
 
         #if UNITY_IOS || UNITY_IPHONE
@@ -181,7 +210,7 @@ namespace LunarConsole
         class PlatformIOS : IPlatform
         {
             [DllImport("__Internal")]
-            private static extern void __lunar_console_initialize(string version, int capacity, int trim, string gesture);
+            private static extern void __lunar_console_initialize(string targetName, string methodName, string version, int capacity, int trim, string gesture);
             
             [DllImport("__Internal")]
             private static extern void __lunar_console_log_message(string message, string stackTrace, int type);
@@ -194,10 +223,28 @@ namespace LunarConsole
 
             [DllImport("__Internal")]
             private static extern void __lunar_console_clear();
-            
-            public PlatformIOS(string version, int capacity, int trim, string gesture)
+
+            [DllImport("__Internal")]
+            private static extern void __lunar_console_action_add(int id, string name, string groupName);
+
+            [DllImport("__Internal")]
+            private static extern void __lunar_console_action_remove(int id);
+
+            [DllImport("__Internal")]
+            private static extern void __lunar_console_action_clear_all();
+
+            /// <summary>
+            /// Initializes a new instance of the iOS platform class.
+            /// </summary>
+            /// <param name="targetName">The name of the game object which will receive native callbacks</param>
+            /// <param name="methodName">The method of the game object which will be called from the native code</param>
+            /// <param name="version">Plugin version</param>
+            /// <param name="capacity">Console capacity (elements over this amount will be trimmed)</param>
+            /// <param name="trim">Console trim amount (how many elements will be trimmed on the overflow)</param>
+            /// <param name="gesture">Gesture name to activate the console</param>
+            public PlatformIOS(string targetName, string methodName, string version, int capacity, int trim, string gesture)
             {
-                __lunar_console_initialize(version, capacity, trim, gesture);
+                __lunar_console_initialize(targetName, methodName, version, capacity, trim, gesture);
             }
             
             public void OnLogMessageReceived(string message, string stackTrace, LogType type)
@@ -221,6 +268,16 @@ namespace LunarConsole
             {
                 __lunar_console_clear();
             }
+
+            public void AddAction(QuickAction action)
+            {
+                __lunar_console_action_add(action.id, action.name, action.groupName);
+            }
+
+            public void RemoveAction(QuickAction action)
+            {
+                __lunar_console_action_remove(action.id);
+            }
         }
 
         #elif UNITY_ANDROID
@@ -242,13 +299,29 @@ namespace LunarConsole
             private readonly IntPtr methodHideConsole;
             private readonly IntPtr methodClearConsole;
 
-            public PlatformAndroid(string version, int capacity, int trim, string gesture)
+            /// <summary>
+            /// Initializes a new instance of the Android platform class.
+            /// </summary>
+            /// <param name="targetName">The name of the game object which will receive native callbacks</param>
+            /// <param name="methodName">The method of the game object which will be called from the native code</param>
+            /// <param name="version">Plugin version</param>
+            /// <param name="capacity">Console capacity (elements over this amount will be trimmed)</param>
+            /// <param name="trim">Console trim amount (how many elements will be trimmed on the overflow)</param>
+            /// <param name="gesture">Gesture name to activate the console</param>
+            public PlatformAndroid(string targetName, string methodName, string version, int capacity, int trim, string gesture)
             {
                 pluginClass = new AndroidJavaClass(PluginClassName);
                 pluginClassRaw = pluginClass.GetRawClass();
 
-                IntPtr methodInit = GetStaticMethod(pluginClassRaw, "init", "(Ljava.lang.String;IILjava.lang.String;)V");
-                CallStaticVoidMethod(methodInit, new jvalue[] { jval(version), jval(capacity), jval(trim), jval(gesture) });
+                IntPtr methodInit = GetStaticMethod(pluginClassRaw, "init", "(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;IILjava.lang.String;)V");
+                CallStaticVoidMethod(methodInit, new jvalue[] {
+                    jval(targetName),
+                    jval(methodName),
+                    jval(version),
+                    jval(capacity),
+                    jval(trim),
+                    jval(gesture)
+                });
 
                 methodLogMessage = GetStaticMethod(pluginClassRaw, "logMessage", "(Ljava.lang.String;Ljava.lang.String;I)V");
                 methodShowConsole = GetStaticMethod(pluginClassRaw, "show", "()V");
@@ -312,6 +385,18 @@ namespace LunarConsole
                 }
             }
 
+            public void OnActionAdd(string title, Delegate actionDelegate)
+            {
+            }
+
+            public void OnActionRemove(string title, Delegate actionDelegate)
+            {
+            }
+
+            public void OnActionsClear()
+            {
+            }
+
             #endregion
 
             #region Helpers
@@ -349,24 +434,42 @@ namespace LunarConsole
         }
 
         #endif // UNITY_ANDROID
-        
+
+        #endregion
+
+        #region Native callback
+
+        void OnNativeMessage(string message)
+        {
+        }
+
+        #endregion
+
         #endif // LUNAR_CONSOLE_ENABLED
+
+        #region Operations
 
         /// <summary>
         /// Shows Lunar console on top of everything. Does nothing if platform is not supported or if plugin is not initizlied.
         /// </summary>
         public static void Show()
         {
-            #if LUNAR_CONSOLE_ENABLED
-            if (instance != null)
+#if LUNAR_CONSOLE_PLATFORM_SUPPORTED
+        #if LUNAR_CONSOLE_ENABLED
+            if (s_instance != null)
             {
-                instance.ShowConsole();
+                s_instance.ShowConsole();
             }
             else
             {
                 Debug.LogError("Can't show " + Constants.PluginName + ": instance is not initialized. Make sure you've installed it correctly");
             }
-            #endif
+        #else
+            Debug.LogWarning("Can't show " + Constants.PluginName + ": plugin is disabled");
+        #endif
+#else
+            Debug.LogWarning("Can't show " + Constants.PluginName + ": current platform is not supported");
+#endif
         }
 
         /// <summary>
@@ -374,16 +477,22 @@ namespace LunarConsole
         /// </summary>
         public static void Hide()
         {
-            #if LUNAR_CONSOLE_ENABLED
-            if (instance != null)
+#if LUNAR_CONSOLE_PLATFORM_SUPPORTED
+        #if LUNAR_CONSOLE_ENABLED
+            if (s_instance != null)
             {
-                instance.HideConsole();
+                s_instance.HideConsole();
             }
             else
             {
                 Debug.LogError("Can't hide " + Constants.PluginName + ": instance is not initialized. Make sure you've installed it correctly");
             }
-            #endif
+        #else
+            Debug.LogWarning("Can't hide " + Constants.PluginName + ": plugin is disabled");
+        #endif
+#else
+            Debug.LogWarning("Can't hide " + Constants.PluginName + ": current platform is not supported");
+#endif
         }
 
         /// <summary>
@@ -391,17 +500,108 @@ namespace LunarConsole
         /// </summary>
         public static void Clear()
         {
-            #if LUNAR_CONSOLE_ENABLED
-            if (instance != null)
+#if LUNAR_CONSOLE_PLATFORM_SUPPORTED
+        #if LUNAR_CONSOLE_ENABLED
+            if (s_instance != null)
             {
-                instance.ClearConsole();
+                s_instance.ClearConsole();
             }
             else
             {
                 Debug.LogError("Can't clear " + Constants.PluginName + ": instance is not initialized. Make sure you've installed it correctly");
             }
-            #endif
+        #else
+            Debug.LogWarning("Can't clear " + Constants.PluginName + ": plugin is disabled");
+        #endif
+#else
+            Debug.LogWarning("Can't clear " + Constants.PluginName + ": current platform is not supported");
+#endif
         }
+
+        #if LUNAR_CONSOLE_ENABLED
+
+        void ShowConsole()
+        {
+            if (m_platform != null)
+            {
+                m_platform.ShowConsole();
+            }
+        }
+
+        void HideConsole()
+        {
+            if (m_platform != null)
+            {
+                m_platform.HideConsole();
+            }
+        }
+
+        void ClearConsole()
+        {
+            if (m_platform != null)
+            {
+                m_platform.ClearConsole();
+            }
+        }
+
+        #endif // LUNAR_CONSOLE_ENABLED
+
+        #endregion
+    
+        #region Quick Actions
+
+        public static void RegisterAction(string name, Action actionDelegate)
+        {
+            #if LUNAR_CONSOLE_ENABLED
+            RegisterAction("", name, actionDelegate);
+            #endif // LUNAR_CONSOLE_ENABLED
+        }
+
+        public static void RegisterAction(string group, string name, Action actionDelegate)
+        {
+            #if LUNAR_CONSOLE_ENABLED
+            s_actionRegistry.RegisterAction(group, name, actionDelegate);
+            #endif // LUNAR_CONSOLE_ENABLED
+        }
+
+        #if LUNAR_CONSOLE_ENABLED
+
+        class PlatformActionRegistryDelegate : IQuickActionRegistryDelegate
+        {
+            readonly IPlatform m_platform;
+
+            public PlatformActionRegistryDelegate(IPlatform platform)
+            {
+                m_platform = platform;
+            }
+
+            public void OnActionAdded(QuickActionRegistry registry, QuickAction action)
+            {
+                m_platform.AddAction(action);
+            }
+
+            public void OnActionRemoved(QuickActionRegistry registry, QuickAction action)
+            {
+                m_platform.RemoveAction(action);
+            }
+        }
+
+        #endif
+
+        #endregion
+
+        #region Properties
+
+        #if UNITY_EDITOR
+
+        public static QuickActionRegistry actionRegistry
+        {
+            get { return s_actionRegistry; }
+        }
+
+        #endif // UNITY_EDITOR
+
+        #endregion
     }
 
     public static class LunarConsoleSettings
