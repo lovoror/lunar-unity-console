@@ -244,6 +244,39 @@
      nil];
 }
 
+- (void)testFilter2
+{
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.switches[@"Test Action Overlay Switch"] tap];
+    
+    [self app:app addActions:@{
+       @"Group1" : @[@"Action"],
+       @"Group2" : @[@"Action1"]
+    }];
+    
+    [self appOpenActionsController:app];
+    
+    XCUIElement *table = app.tables.element;
+    XCUIElement *filterSearchField = app.searchFields[@"Filter"];
+    [filterSearchField tap];
+    [filterSearchField typeText:@"Action1"];
+    [self asserTable:table, @"Group2", @"Action1", nil];
+    
+    [self app:app tapButton:@"Search"];
+    [self app:app addActions:@{
+       @"" : @[@"Action", @"Action1"]
+    }];
+    
+    [filterSearchField tap];
+    [self appDeleteText:app];
+    
+    [self asserTable:table,
+     @"Action",
+     @"Action1",
+     @"Group1", @"Action",
+     @"Group2", @"Action1", nil];
+}
+
 #pragma mark -
 #pragma mark Helpers
 
