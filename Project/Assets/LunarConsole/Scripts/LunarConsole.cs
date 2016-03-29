@@ -182,7 +182,7 @@ namespace LunarConsolePlugin
             if (Application.platform == RuntimePlatform.Android)
             {
                 LunarConsoleNativeMessageCallback callback = OnNativeMessage;
-                return new PlatformAndroid(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(gesture));
+                return new PlatformAndroid(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(m_gesture));
             }
             #endif
 
@@ -382,16 +382,14 @@ namespace LunarConsolePlugin
                 }
             }
 
-            public void OnActionAdd(string title, Delegate actionDelegate)
+            public void AddAction(QuickAction action)
             {
+                Debug.LogWarning("Can't add quick action: platform is not supported yet");
             }
 
-            public void OnActionRemove(string title, Delegate actionDelegate)
+            public void RemoveAction(QuickAction action)
             {
-            }
-
-            public void OnActionsClear()
-            {
+                Debug.LogWarning("Can't remove quick action: platform is not supported yet");
             }
 
             #endregion
