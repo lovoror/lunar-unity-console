@@ -230,9 +230,6 @@ namespace LunarConsolePlugin
             [DllImport("__Internal")]
             private static extern void __lunar_console_action_remove(int id);
 
-            [DllImport("__Internal")]
-            private static extern void __lunar_console_action_clear_all();
-
             /// <summary>
             /// Initializes a new instance of the iOS platform class.
             /// </summary>
