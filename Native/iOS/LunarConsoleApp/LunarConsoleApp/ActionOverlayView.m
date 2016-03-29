@@ -84,15 +84,25 @@ typedef void (^InputCallback)(NSString *input);
 
 - (IBAction)onRemoveAction:(id)sender
 {
-    [self showInputControllerWithMessage:@"Action name" callback:^(NSString *actionName) {
+    [self showInputControllerWithMessage:@"Remove actions" callback:^(NSString *actionData) {
+        NSData *data = [actionData dataUsingEncoding:NSUTF8StringEncoding];
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        
         LUConsolePlugin *plugin = [ViewController pluginInstance];
-        for (LUActionGroup *group in plugin.actionRegistry.groups)
+        for (NSString *actionName in json)
         {
-            for (LUAction *action in group.actions)
+            NSArray *groups = plugin.actionRegistry.groups;
+            for (NSInteger groupIndex = groups.count - 1; groupIndex >= 0; --groupIndex)
             {
-                if ([action.name isEqualToString:actionName])
+                LUActionGroup *group = groups[groupIndex];
+                NSArray *actions = group.actions;
+                for (NSInteger actionIndex = actions.count - 1; actionIndex >= 0; --actionIndex)
                 {
-                    [plugin unregisterActionWithId:action.actionId];
+                    LUAction *action = actions[actionIndex];
+                    if ([action.name isEqualToString:actionName])
+                    {
+                        [plugin unregisterActionWithId:action.actionId];
+                    }
                 }
             }
         }
@@ -101,6 +111,16 @@ typedef void (^InputCallback)(NSString *input);
 
 - (IBAction)onRemoveGroup:(id)sender
 {
+    [self showInputControllerWithMessage:@"Remove groups" callback:^(NSString *actionData) {
+        NSData *data = [actionData dataUsingEncoding:NSUTF8StringEncoding];
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        
+        LUConsolePlugin *plugin = [ViewController pluginInstance];
+        for (NSString *groupName in json)
+        {
+            [plugin unregisterGroupWithName:groupName];
+        }
+    }];
 }
 
 @end

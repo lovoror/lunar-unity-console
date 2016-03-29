@@ -122,6 +122,133 @@
      nil];
 }
 
+- (void)testRemoveActions
+{
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.switches[@"Test Action Overlay Switch"] tap];
+    
+    [self app:app addActions:@{
+                               @"Group2" : @[@"Action22", @"Action21", @"Action23"],
+                               @"Group1" : @[@"Action12", @"Action11"],
+                               @"" : @[@"Action2", @"Action1", @"Action3"]
+                               }];
+    
+    [self appOpenActionsController:app];
+    
+    [self app:app removeActions:@[@"Action11", @"Action2", @"Action23"]];
+    
+    XCUIElement *table = app.tables.element;
+    [self asserTable:table,
+     @"Action1",
+     @"Action3",
+     @"Group1",
+     @"Action12",
+     @"Group2",
+     @"Action21",
+     @"Action22",
+     nil];
+    
+    [self app:app removeActions:@[@"Action1", @"Action3"]];
+    [self asserTable:table,
+     @"Group1",
+     @"Action12",
+     @"Group2",
+     @"Action21",
+     @"Action22",
+     nil];
+    
+    [self app:app removeActions:@[@"Action21", @"Action22"]];
+    [self asserTable:table,
+     @"Group1",
+     @"Action12",
+     nil];
+    
+    [self app:app removeActions:@[@"Action12"]];
+    
+    XCTAssertFalse(app.tables.element.hittable);
+    XCTAssertTrue(app.otherElements[@"No Actions Warning View"].hittable);
+}
+
+- (void)testRemoveActionsFilter
+{
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.switches[@"Test Action Overlay Switch"] tap];
+    
+    [self app:app addActions:@{
+       @"GroupA" : @[@"a1", @"a2", @"a3"],
+       @"GroupB" : @[@"b1", @"b2", @"b3"],
+       @"" : @[@"ab1", @"ab2", @"ab3"]
+    }];
+    
+    [self appOpenActionsController:app];
+    
+    XCUIElement *filterSearchField = app.searchFields[@"Filter"];
+    [filterSearchField tap];
+    
+    [filterSearchField typeText:@"a"];
+    [self app:app tapButton:@"Search"];
+    
+    [self app:app removeActions:@[@"a2", @"b2", @"ab2"]];
+    
+    XCUIElement *table = app.tables.element;
+    [self asserTable:table,
+     @"ab1",
+     @"ab3",
+     @"GroupA",
+     @"a1",
+     @"a3",
+     nil];
+    
+    [self app:app removeActions:@[@"a1", @"a3"]];
+    [self asserTable:table,
+     @"ab1",
+     @"ab3",
+     nil];
+    
+    [self app:app removeActions:@[@"ab1", @"ab3"]];
+    [self asserTable:table, nil];
+    
+    XCTAssertTrue(app.tables.element.hittable);
+    XCTAssertFalse(app.otherElements[@"No Actions Warning View"].hittable);
+    
+    [filterSearchField tap];
+    [self appDeleteText:app];
+    
+    [self asserTable:table,
+     @"GroupB",
+     @"b1",
+     @"b3",
+     nil];
+}
+
+- (void)testRemoveGroups
+{
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.switches[@"Test Action Overlay Switch"] tap];
+    
+    [self app:app addActions:@{
+       @"Group2" : @[@"Action22", @"Action21", @"Action23"],
+       @"Group1" : @[@"Action12", @"Action11"],
+       @"" : @[@"Action2", @"Action1", @"Action3"]
+    }];
+    
+    [self appOpenActionsController:app];
+    
+    [self app:app removeGroups:@[@"", @"Group2"]];
+    
+    XCUIElement *table = app.tables.element;
+    [self asserTable:table,
+     @"Group1",
+     @"Action11",
+     @"Action12",
+     nil];
+    
+    [self app:app removeGroups:@[@"Group1"]];
+    
+    XCTAssertFalse(app.tables.element.hittable);
+    XCTAssertTrue(app.otherElements[@"No Actions Warning View"].hittable);
+}
+
 - (void)testFilter
 {
     XCUIApplication *app = [[XCUIApplication alloc] init];
@@ -312,6 +439,26 @@
 - (void)app:(XCUIApplication *)app addActions:(NSDictionary *)actions
 {
     [app.buttons[@"Test Add Action Button"] tap];
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [self app:app alertWithName:@"Lunar" enterText:json];
+    LU_RELEASE(json);
+}
+
+- (void)app:(XCUIApplication *)app removeActions:(NSArray *)actions
+{
+    [app.buttons[@"Test Remove Action Button"] tap];
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [self app:app alertWithName:@"Lunar" enterText:json];
+    LU_RELEASE(json);
+}
+
+- (void)app:(XCUIApplication *)app removeGroups:(NSArray *)actions
+{
+    [app.buttons[@"Test Remove Group Button"] tap];
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
     NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

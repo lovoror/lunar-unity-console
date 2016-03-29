@@ -32,5 +32,6 @@
 
 - (LUAction *)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group;
 - (BOOL)unregisterActionWithId:(int)actionId;
+- (BOOL)unregisterGroupWithName:(NSString *)name;
 
 @end

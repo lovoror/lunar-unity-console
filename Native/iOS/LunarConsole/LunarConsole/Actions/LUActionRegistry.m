@@ -76,10 +76,10 @@
 
 - (BOOL)unregisterActionWithId:(int)actionId
 {
-    for (NSUInteger groupIndex = 0; groupIndex < _groups.count; ++groupIndex)
+    for (NSInteger groupIndex = _groups.count - 1; groupIndex >= 0; --groupIndex)
     {
         LUActionGroup *group = _groups[groupIndex];
-        for (NSUInteger actionIndex = 0; actionIndex < group.actionCount; ++actionIndex)
+        for (NSInteger actionIndex = group.actionCount - 1; actionIndex >= 0; --actionIndex)
         {
             LUAction *action = [group actionAtIndex:actionIndex];
             if (action.actionId == actionId)
@@ -89,6 +89,7 @@
                 
                 if (group.actionCount == 0) // group is empty
                 {
+                    group = LU_AUTORELEASE(LU_RETAIN(group)); // keep a reference to the group
                     [_groups removeObjectAtIndex:groupIndex]; // remove group
                     
                     [_delegate actionRegistry:self didRemoveGroup:group atIndex:groupIndex];
@@ -100,6 +101,27 @@
                 
                 return YES;
             }
+        }
+    }
+    
+    return NO;
+}
+
+- (BOOL)unregisterGroupWithName:(NSString *)name
+{
+    LUAssert(name);
+    if (name == nil) return NO;
+    
+    for (NSInteger groupIndex = _groups.count - 1; groupIndex >= 0; --groupIndex)
+    {
+        LUActionGroup *group = _groups[groupIndex];
+        if ([group.name isEqualToString:name])
+        {
+            group = LU_AUTORELEASE(LU_RETAIN(group)); // keep a reference to the group
+            [_groups removeObjectAtIndex:groupIndex]; // remove group
+            
+            [_delegate actionRegistry:self didRemoveGroup:group atIndex:groupIndex];
+            return YES;
         }
     }
     

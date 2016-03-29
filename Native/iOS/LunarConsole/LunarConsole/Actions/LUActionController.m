@@ -276,7 +276,7 @@
 
 - (void)updateNoActionWarningView
 {
-    [self setNoActionsWarningViewHidden:_actionRegistryFilter.groupCount > 0];
+    [self setNoActionsWarningViewHidden:_actionRegistryFilter.registry.groupCount > 0];
 }
 
 - (void)setNoActionsWarningViewHidden:(BOOL)hidden

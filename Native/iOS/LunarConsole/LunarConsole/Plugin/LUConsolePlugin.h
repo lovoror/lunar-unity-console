@@ -58,6 +58,7 @@ typedef enum : NSUInteger {
 
 - (void)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group;
 - (void)unregisterActionWithId:(int)actionId;
+- (void)unregisterGroupWithName:(NSString *)name;
 
 - (void)enableGestureRecognition;
 - (void)disableGestureRecognition;
