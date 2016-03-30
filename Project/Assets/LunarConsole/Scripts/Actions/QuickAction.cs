@@ -9,6 +9,7 @@ namespace LunarConsolePluginInternal
 {
     public class QuickAction : IComparable<QuickAction>
     {
+        static readonly string[] kEmptyArgs = new String[0];
         static int s_nextActionId;
 
         readonly int m_id;
@@ -38,11 +39,11 @@ namespace LunarConsolePluginInternal
             m_actionDelegate = actionDelegate;
         }
 
-        internal bool Execute(string[] arguments)
+        internal bool Execute()
         {
             try
             {
-                return ReflectionUtils.Invoke(actionDelegate, arguments);
+                return ReflectionUtils.Invoke(actionDelegate, kEmptyArgs); // TODO: remove it
             }
             catch (ReflectionException e)
             {

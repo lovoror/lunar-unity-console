@@ -238,7 +238,7 @@ static const CGFloat kWarningHeight = 45.0f;
 
 - (void)pluginController:(LUConsolePluginController *)controller didSelectActionWithId:(int)actionId
 {
-    NSLog(@"Selected action: %d", actionId);
+    [_scriptMessenger sendMessage:[NSString stringWithFormat:@"action:%d", actionId]]; // TODO: replace with JSON
 }
 
 - (void)pluginControllerDidClose:(LUConsolePluginController *)controller

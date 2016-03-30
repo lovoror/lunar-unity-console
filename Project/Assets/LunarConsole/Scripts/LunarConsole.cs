@@ -436,6 +436,21 @@ namespace LunarConsolePlugin
 
         void OnNativeMessage(string message)
         {
+            string[] tokens = message.Split(':');
+            string name = tokens[0];
+            string value = tokens[1];
+            if (name == "action")
+            {
+                int actionId = StringUtils.ParseInt(value, -1);
+                if (actionId != -1)
+                {
+                    QuickAction action = s_actionRegistry.FindAction(actionId);
+                    if (action != null)
+                    {
+                        action.Execute();
+                    }
+                }
+            }
         }
 
         #endregion
