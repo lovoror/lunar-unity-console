@@ -111,6 +111,19 @@
     return variable;
 }
 
+- (LUCVar *)variableWithId:(int)variableId
+{
+    for (LUCVar *cvar in _variables)
+    {
+        if (cvar.actionId == variableId)
+        {
+            return cvar;
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark -
 #pragma mark Properties
 

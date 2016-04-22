@@ -51,6 +51,8 @@
 
 - (void)setupVariable:(LUCVar *)variable
 {
+    _variableId = variable.actionId;
+    
     _titleLabel.text = variable.name;
     
     LUTheme *theme = [LUTheme mainTheme];
@@ -58,6 +60,14 @@
     _titleLabel.font = theme.actionsFont;
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.opaque = YES;
+}
+
+- (void)notifyValueChanged:(NSString *)value
+{
+    if ([_delegate respondsToSelector:@selector(consoleVariableTableViewCell:didChangeValue:)])
+    {
+        [_delegate consoleVariableTableViewCell:self didChangeValue:value];
+    }
 }
 
 @end

@@ -12,11 +12,18 @@
 
 @interface LUCVarInputTableViewCell () <UITextFieldDelegate>
 
-@property (nonatomic, assign) IBOutlet UITextField *inputField;
+@property (nonatomic, assign) IBOutlet UITextField * inputField;
+@property (nonatomic, strong) NSString * lastValue;
 
 @end
 
 @implementation LUCVarInputTableViewCell
+
+- (void)dealloc
+{
+    LU_RELEASE(_lastValue);
+    LU_SUPER_DEALLOC
+}
 
 #pragma mark -
 #pragma mark Inheritance
@@ -26,6 +33,7 @@
     [super setupVariable:variable];
     
     _inputField.text = variable.value;
+    self.lastValue = variable.value;
 }
 
 - (BOOL)isValidInputText:(NSString *)text
@@ -47,9 +55,17 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (![self isValidInputText:textField.text])
+    NSString *value = textField.text;
+    
+    if ([self isValidInputText:value])
     {
-        
+        self.lastValue = value;
+        [self notifyValueChanged:value];
+    }
+    else
+    {
+        // FIXME: show error message
+        textField.text = self.lastValue;
     }
 }
 

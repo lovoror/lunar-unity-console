@@ -32,5 +32,6 @@
 - (LUAction *)registerActionWithId:(int)actionId name:(NSString *)name;
 - (BOOL)unregisterActionWithId:(int)actionId;
 - (LUCVar *)registerVariableWithId:(int)variableId name:(NSString *)name typeName:(NSString *)type value:(NSString *)value;
+- (LUCVar *)variableWithId:(int)variableId;
 
 @end

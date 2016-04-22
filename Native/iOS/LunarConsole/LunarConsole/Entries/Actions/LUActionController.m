@@ -14,7 +14,7 @@ static const NSInteger kSectionIndexActions = 0;
 static const NSInteger kSectionIndexVariables = 1;
 static const NSInteger kSectionCount = 2;
 
-@interface LUActionController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, LUActionRegistryFilterDelegate>
+@interface LUActionController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, LUActionRegistryFilterDelegate, LUCVarTableViewCellDelegate>
 {
     LUActionRegistryFilter * _actionRegistryFilter;
 }
@@ -270,6 +270,16 @@ static const NSInteger kSectionCount = 2;
 }
 
 #pragma mark -
+#pragma mark LUCVarTableViewCellDelegate
+
+- (void)consoleVariableTableViewCell:(LUCVarTableViewCell *)cell didChangeValue:(NSString *)value
+{
+    LUCVar *cvar = [_actionRegistryFilter.registry variableWithId:cell.variableId];
+    LUAssert(cvar);
+    cvar.value = value;
+}
+
+#pragma mark -
 #pragma mark Actions
 
 - (UITableViewCell *)tableView:(UITableView *)tableView actionCellForRowAtIndex:(NSInteger)index
@@ -307,7 +317,8 @@ static const NSInteger kSectionCount = 2;
     LUTheme *theme = [LUTheme mainTheme];
     
     LUCVar *cvar = [self variableAtIndex:index];
-    UITableViewCell *cell = [cvar tableView:tableView cellAtIndex:index];
+    LUCVarTableViewCell *cell = (LUCVarTableViewCell *)[cvar tableView:tableView cellAtIndex:index];
+    cell.delegate = self;
     cell.contentView.backgroundColor = index % 2 == 0 ? theme.actionsBackgroundColorDark : theme.actionsBackgroundColorLight;
     return cell;
 }

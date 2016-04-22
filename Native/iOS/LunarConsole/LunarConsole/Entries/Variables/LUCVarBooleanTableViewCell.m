@@ -24,7 +24,6 @@
 - (void)setupVariable:(LUCVar *)variable
 {
     [super setupVariable:variable];
-    
     _toggleSwitch.on = [variable.value isEqualToString:@"1"];
 }
 
@@ -33,7 +32,7 @@
 
 - (IBAction)onToggleSwitch:(id)sender
 {
-    NSLog(@"Implement toggle switch");
+    [self notifyValueChanged:_toggleSwitch.isOn ? @"1" : @"0"];
 }
 
 @end

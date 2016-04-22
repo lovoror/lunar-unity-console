@@ -114,9 +114,9 @@ void __lunar_console_action_remove(int actionId)
 void __lunar_console_cvar_add(int entryId, const char *nameStr, const char *typeStr, const char *valueStr)
 {
     lunar_dispatch_main(^{
-        NSString *name = [NSString stringWithUTF8String:nameStr];
-        NSString *type = [NSString stringWithUTF8String:typeStr];
-        NSString *value = [NSString stringWithUTF8String:valueStr];
+        NSString *name = [[NSString alloc] initWithUTF8String:nameStr];
+        NSString *type = [[NSString alloc] initWithUTF8String:typeStr];
+        NSString *value = [[NSString alloc] initWithUTF8String:valueStr];
         [_lunarConsolePlugin registerVariableWithId:entryId name:name type:type value:value];
         LU_RELEASE(name);
         LU_RELEASE(type);
