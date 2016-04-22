@@ -39,6 +39,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using LunarConsolePlugin;
 using LunarConsolePluginInternal;
 
 #if UNITY_EDITOR
@@ -203,6 +204,7 @@ namespace LunarConsolePlugin
 
             void AddAction(QuickAction action);
             void RemoveAction(QuickAction action);
+            void AddVariable(CVar cvar);
         }
 
         #if UNITY_IOS || UNITY_IPHONE
@@ -229,6 +231,9 @@ namespace LunarConsolePlugin
 
             [DllImport("__Internal")]
             private static extern void __lunar_console_action_remove(int id);
+
+            [DllImport("__Internal")]
+            private static extern void __lunar_console_cvar_add(string name, string type, string value);
 
             /// <summary>
             /// Initializes a new instance of the iOS platform class.
@@ -274,6 +279,11 @@ namespace LunarConsolePlugin
             public void RemoveAction(QuickAction action)
             {
                 __lunar_console_action_remove(action.id);
+            }
+
+            public void AddVariable(CVar cvar)
+            {
+                __lunar_console_cvar_add(cvar.Name, cvar.Type.ToString(), cvar.Value);
             }
         }
 
@@ -594,6 +604,11 @@ namespace LunarConsolePlugin
             {
                 m_platform.RemoveAction(action);
             }
+
+            public void OnVariableAdded(QuickActionRegistry registry, CVar cvar)
+            {
+                m_platform.AddVariable(cvar);
+            }
         }
 
         #endif
@@ -602,14 +617,10 @@ namespace LunarConsolePlugin
 
         #region Properties
 
-        #if UNITY_EDITOR
-
         public static QuickActionRegistry actionRegistry
         {
             get { return s_actionRegistry; }
         }
-
-        #endif // UNITY_EDITOR
 
         #endregion
     }
@@ -694,4 +705,20 @@ namespace LunarConsolePlugin
     }
 
     #endif // UNITY_EDITOR
+}
+
+namespace LunarConsolePluginInternal
+{
+    static class LunarConsoleLittleHelper
+    {
+        public static void Register(CVar v)
+        {
+            #if LUNAR_CONSOLE_ENABLED || UNITY_EDITOR
+            if (LunarConsole.actionRegistry != null)
+            {
+                LunarConsole.actionRegistry.Register(v);
+            }
+            #endif
+        }
+    }
 }

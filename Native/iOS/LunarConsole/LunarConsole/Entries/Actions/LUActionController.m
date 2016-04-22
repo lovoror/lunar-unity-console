@@ -10,6 +10,10 @@
 
 #import "LUActionController.h"
 
+static const NSInteger kSectionIndexActions = 0;
+static const NSInteger kSectionIndexVariables = 1;
+static const NSInteger kSectionCount = 2;
+
 @interface LUActionController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, LUActionRegistryFilterDelegate>
 {
     LUActionRegistryFilter * _actionRegistryFilter;
@@ -119,35 +123,58 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _actionRegistryFilter.groupCount;
+    return kSectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    LUActionGroup *group = [self groupAtIndex:section];
-    return group.actionCount;
+    if (section == kSectionIndexActions)
+    {
+        return _actionRegistryFilter.actions.count;
+    }
+    
+    if (section == kSectionIndexVariables)
+    {
+        return _actionRegistryFilter.variables.count;
+    }
+    
+    LUAssertMsgv(section < kSectionCount, @"Unexpected section index: %ld", (long) section);
+    return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self groupAtIndex:section].name;
+    if (section == kSectionIndexActions)
+    {
+        return [self actionCount] > 0 ? @"Actions" : @"";
+    }
+    
+    if (section == kSectionIndexVariables)
+    {
+        return [self variableCount] > 0 ? @"Variables" : @"";
+    }
+    
+    LUAssertMsgv(section < kSectionCount, @"Unexpected section index: %ld", (long) section);
+    return @"";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LUAction *action = [self actionAtIndexPath:indexPath];
+    NSInteger section = indexPath.section;
+    NSInteger index = indexPath.row;
     
-    LUTheme *theme = [LUTheme mainTheme];
-    
-    LUActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"action"];
-    if (cell == nil)
+    if (section == kSectionIndexActions)
     {
-        cell = [LUActionTableViewCell cellWithReuseIdentifier:@"action"];
+        return [self tableView:tableView actionCellForRowAtIndex:index];
     }
-    cell.title = action.name;
-    cell.cellColor = indexPath.row % 2 == 0 ? theme.actionsBackgroundColorDark : theme.actionsBackgroundColorLight;
     
-    return cell;
+    if (section == kSectionIndexVariables)
+    {
+        return [self tableView:tableView variableCellForRowAtIndex:index];
+    }
+    
+    LUAssertMsgv(section < kSectionCount, @"Unexpected section index: %ld", (long) section);
+    return nil;
 }
 
 #pragma mark -
@@ -172,7 +199,7 @@
     
     if ([_delegate respondsToSelector:@selector(actionController:didSelectActionWithId:)])
     {
-        LUAction *action = [self actionAtIndexPath:indexPath];
+        LUAction *action = [self actionAtIndex:indexPath.row];
         [_delegate actionController:self didSelectActionWithId:action.actionId];
     }
 }
@@ -218,57 +245,81 @@
 #pragma mark -
 #pragma mark LUActionRegistryFilterDelegate
 
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddGroup:(LUActionGroup *)group atIndex:(NSUInteger)index
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddAction:(LUAction *)action atIndex:(NSUInteger)index
 {
-    NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:index];
-    [_tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
-    LU_RELEASE(indexSet);
-    
-    [self updateNoActionWarningView];
-}
-
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveGroup:(LUActionGroup *)group atIndex:(NSUInteger)index
-{
-    NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:index];
-    [_tableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
-    LU_RELEASE(indexSet);
-    
-    [self updateNoActionWarningView];
-}
-
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex
-{
-    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:groupIndex]];
+    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:kSectionIndexActions]];
     [_tableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
     
     [self updateNoActionWarningView];
 }
 
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index
 {
-    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:groupIndex]];
+    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:kSectionIndexActions]];
     [_tableView deleteRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
     
     [self updateNoActionWarningView];
 }
 
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registry didRegisterVariable:(LUCVar *)variable atIndex:(NSUInteger)index
+{
+    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:kSectionIndexVariables]];
+    [_tableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+    
+    [self updateNoActionWarningView];
+}
+
 #pragma mark -
-#pragma mark Groups
+#pragma mark Actions
 
-- (LUAction *)actionAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView actionCellForRowAtIndex:(NSInteger)index
 {
-    LUActionGroup *actionGroup = [self groupAtIndex:indexPath.section];
-    return actionGroup.actions[indexPath.row];
+    LUAction *action = [self actionAtIndex:index];
+    
+    LUTheme *theme = [LUTheme mainTheme];
+    
+    LUActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"action"];
+    if (cell == nil)
+    {
+        cell = [LUActionTableViewCell cellWithReuseIdentifier:@"action"];
+    }
+    cell.title = action.name;
+    cell.cellColor = index % 2 == 0 ? theme.actionsBackgroundColorDark : theme.actionsBackgroundColorLight;
+    
+    return cell;
 }
 
-- (LUActionGroup *)groupAtIndex:(NSUInteger)index
+- (LUAction *)actionAtIndex:(NSInteger)index
 {
-    return [_actionRegistryFilter groupAtIndex:index];
+    return _actionRegistryFilter.actions[index];
 }
 
-- (NSInteger)groupCount
+- (NSInteger)actionCount
 {
-    return _actionRegistryFilter.groupCount;
+    return _actionRegistryFilter.actions.count;
+}
+
+#pragma mark -
+#pragma mark Variables
+
+- (UITableViewCell *)tableView:(UITableView *)tableView variableCellForRowAtIndex:(NSInteger)index
+{
+    LUTheme *theme = [LUTheme mainTheme];
+    
+    LUCVar *cvar = [self variableAtIndex:index];
+    UITableViewCell *cell = [cvar tableView:tableView cellAtIndex:index];
+    cell.contentView.backgroundColor = index % 2 == 0 ? theme.actionsBackgroundColorDark : theme.actionsBackgroundColorLight;
+    return cell;
+}
+
+- (LUCVar *)variableAtIndex:(NSInteger)index
+{
+    return _actionRegistryFilter.variables[index];
+}
+
+- (NSInteger)variableCount
+{
+    return _actionRegistryFilter.variables.count;
 }
 
 #pragma mark -
@@ -276,7 +327,8 @@
 
 - (void)updateNoActionWarningView
 {
-    [self setNoActionsWarningViewHidden:_actionRegistryFilter.registry.groupCount > 0];
+    BOOL hasContent = [self actionCount] > 0 || [self variableCount] > 0;
+    [self setNoActionsWarningViewHidden:hasContent];
 }
 
 - (void)setNoActionsWarningViewHidden:(BOOL)hidden

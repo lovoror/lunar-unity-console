@@ -37,57 +37,30 @@
 }
 
 #pragma mark -
-#pragma mark Register actions
+#pragma mark Register
 
-- (void)testRegisterActionsDefaultGroup
+- (void)testRegisterActionsAndVariables
 {
-    [self registerActionName:@"a2"];
-    [self registerActionName:@"a1"];
-    [self registerActionName:@"a3"];
+    [self registerActionWithName:@"a2"];
+    [self registerActionWithName:@"a1"];
+    [self registerActionWithName:@"a3"];
     
-    // should be in default group
-    [self assertGroups:@"", nil];
+    [self registerVariableWithName:@"v2"];
+    [self registerVariableWithName:@"v1"];
+    [self registerVariableWithName:@"v3"];
     
-    [self assertGroup:@"" actions:@"a1", @"a2", @"a3", nil];
-}
-
-- (void)testRegisterActionsMultipleGroups
-{
-    [self registerActionGroup:@"b" name:@"b2"];
-    [self registerActionGroup:@"b" name:@"b1"];
-    [self registerActionGroup:@"b" name:@"b3"];
-    
-    [self registerActionGroup:@"a" name:@"a2"];
-    [self registerActionGroup:@"a" name:@"a1"];
-    [self registerActionGroup:@"a" name:@"a3"];
-    
-    [self registerActionName:@"d2"];
-    [self registerActionName:@"d1"];
-    [self registerActionName:@"d3"];
-    
-    [self registerActionGroup:@"c" name:@"c2"];
-    [self registerActionGroup:@"c" name:@"c1"];
-    [self registerActionGroup:@"c" name:@"c3"];
-    
-    [self assertGroups:@"", @"a", @"b", @"c", nil];
-    
-    [self assertGroup:@"" actions:@"d1", @"d2", @"d3", nil];
-    [self assertGroup:@"a" actions:@"a1", @"a2", @"a3", nil];
-    [self assertGroup:@"b" actions:@"b1", @"b2", @"b3", nil];
-    [self assertGroup:@"c" actions:@"c1", @"c2", @"c3", nil];
+    [self assertActions:@"a1", @"a2", @"a3", nil];
+    [self assertVariables:@"v1", @"v2", @"v3", nil];
 }
 
 - (void)testRegisterMultipleActionsWithSameName
 {
-    [self registerActionName:@"a2"];
-    [self registerActionName:@"a3"];
-    [self registerActionName:@"a1"];
-    [self registerActionName:@"a3"];
+    [self registerActionWithName:@"a2"];
+    [self registerActionWithName:@"a3"];
+    [self registerActionWithName:@"a1"];
+    [self registerActionWithName:@"a3"];
     
-    // should be in default group
-    [self assertGroups:@"", nil];
-    
-    [self assertGroup:@"" actions:@"a1", @"a2", @"a3", nil];
+    [self assertActions:@"a1", @"a2", @"a3", nil];
 }
 
 #pragma mark -
@@ -95,23 +68,21 @@
 
 - (void)testUnregisterAction
 {
-    int id2 = [self registerActionGroup:@"a" name:@"a2"].actionId;
-    int id1 = [self registerActionGroup:@"a" name:@"a1"].actionId;
-    int id3 = [self registerActionGroup:@"a" name:@"a3"].actionId;
-    
-    [self assertGroups:@"a", nil];
+    int id2 = [self registerActionWithName:@"a2"].actionId;
+    int id1 = [self registerActionWithName:@"a1"].actionId;
+    int id3 = [self registerActionWithName:@"a3"].actionId;
     
     [self unregisterActionWithId:id1];
-    [self assertGroup:@"a" actions:@"a2", @"a3", nil];
+    [self assertActions:@"a2", @"a3", nil];
     
     [self unregisterActionWithId:id2];
-    [self assertGroup:@"a" actions:@"a3", nil];
+    [self assertActions:@"a3", nil];
 
     [self unregisterActionWithId:id3];
-    [self assertGroups:nil];
+    [self assertActions:nil];
     
     [self unregisterActionWithId:id3];
-    [self assertGroups:nil];
+    [self assertActions:nil];
 }
 
 #pragma mark -
@@ -119,210 +90,79 @@
 
 - (void)testDelegateNotifications
 {
-    // empty
-    [self registerActionGroup:@"a" name:@"a2"];
-    [self assertResult:@"added group: a (0)", nil];
+    // register actions
+    [self registerActionWithName:@"a2"];
+    [self assertResult:@"added action: a2 (0)", nil];
     
-    // a/a2
-    [self registerActionGroup:@"c" name:@"c1"];
-    [self assertResult:@"added group: c (1)", nil];
-    
-    // a/a2
-    // c/c1
-    [self registerActionGroup:@"b" name:@"b1"];
-    [self assertResult:@"added group: b (1)", nil];
-    
-    // a/a2
-    // b/b1
-    // c/c1
-    [self registerActionName:@"d1"];
-    [self assertResult:@"added group:  (0)", nil];
-    
-    //  /d1
-    // a/a2
-    // b/b1
-    // c/c1
-    [self registerActionGroup:@"a" name:@"a1"];
-    [self assertResult:@"added: a/a1 (1/0)", nil];
+    [self registerActionWithName:@"a1"];
+    [self assertResult:@"added action: a1 (0)", nil];
 
-    //  /d1
-    // a/a1
-    // a/a2
-    // b/b1
-    // c/c1
-    [self registerActionGroup:@"a" name:@"a3"];
-    [self assertResult:@"added: a/a3 (1/2)", nil];
-
-    //  /d1
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b1
-    // c/c1
-    [self registerActionGroup:@"c" name:@"c2"];
-    [self assertResult:@"added: c/c2 (3/1)", nil];
-
-    //  /d1
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b1
-    // c/c1
-    // c/c2
-    [self registerActionGroup:@"b" name:@"b3"];
-    [self assertResult:@"added: b/b3 (2/1)", nil];
-
-    //  /d1
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b1
-    // b/b3
-    // c/c1
-    // c/c2
-    [self registerActionGroup:@"b" name:@"b2"];
-    [self assertResult:@"added: b/b2 (2/1)", nil];
-
-    //  /d1
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b1
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
-    [self registerActionName:@"d2"];
-    [self assertResult:@"added: /d2 (0/1)", nil];
+    [self registerActionWithName:@"a3"];
+    [self assertResult:@"added action: a3 (2)", nil];
     
-    //  /d1
-    //  /d2
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b1
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
-    [self unregisterActionWithName:@"b1"];
-    [self assertResult:@"removed: b/b1 (2/0)", nil];
+    // register variables
+    [self registerVariableWithName:@"1.bool" type:LUCVarTypeNameBoolean value:@"1"];
+    [self assertResult:@"register variable: Boolean 1.bool 1 (0)", nil];
     
-    //  /d1
-    //  /d2
-    // a/a1
-    // a/a2
-    // a/a3
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
+    [self registerVariableWithName:@"2.int" type:LUCVarTypeNameInteger value:@"10"];
+    [self assertResult:@"register variable: Integer 2.int 10 (1)", nil];
+    
+    [self registerVariableWithName:@"3.float" type:LUCVarTypeNameFloat value:@"3.14"];
+    [self assertResult:@"register variable: Float 3.float 3.14 (2)", nil];
+    
+    [self registerVariableWithName:@"4.string" type:LUCVarTypeNameString value:@"value"];
+    [self assertResult:@"register variable: String 4.string value (3)", nil];
+
+    // unregister variables
     [self unregisterActionWithName:@"a1"];
-    [self assertResult:@"removed: a/a1 (1/0)", nil];
+    [self assertResult:@"removed action: a1 (0)", nil];
     
-    //  /d1
-    //  /d2
-    // a/a2
-    // a/a3
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
     [self unregisterActionWithName:@"a3"];
-    [self assertResult:@"removed: a/a3 (1/1)", nil];
+    [self assertResult:@"removed action: a3 (1)", nil];
     
-    //  /d1
-    //  /d2
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
     [self unregisterActionWithName:@"a2"];
-    [self assertResult:@"removed group: a (1)", nil];
-
-    //  /d2
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
-    [self unregisterActionWithName:@"d1"];
-    [self assertResult:@"removed: /d1 (0/0)", nil];
-    
-    //  /d2
-    // b/b2
-    // b/b3
-    // c/c1
-    // c/c2
-    [self unregisterActionWithName:@"d2"];
-    [self assertResult:@"removed group:  (0)", nil];
-    
-    // b/b3
-    // c/c1
-    // c/c2
-    [self unregisterActionWithName:@"b2"];
-    [self assertResult:@"removed: b/b2 (0/0)", nil];
-    
-    // b/b3
-    // c/c2
-    [self unregisterActionWithName:@"c1"];
-    [self assertResult:@"removed: c/c1 (1/0)", nil];
-    
-    // b/b3
-    [self unregisterActionWithName:@"c2"];
-    [self assertResult:@"removed group: c (1)", nil];
-    
-    // empty
-    [self unregisterActionWithName:@"b3"];
-    [self assertResult:@"removed group: b (0)", nil];
+    [self assertResult:@"removed action: a2 (0)", nil];
 }
 
 #pragma mark -
 #pragma mark LUActionRegistryDelegte
 
-- (void)actionRegistry:(LUActionRegistry *)registry didAddGroup:(LUActionGroup *)group atIndex:(NSUInteger)index
+- (void)actionRegistry:(LUActionRegistry *)registry didAddAction:(LUAction *)action atIndex:(NSUInteger)index
 {
-    [self addResult:[NSString stringWithFormat:@"added group: %@ (%d)", group.name, (int) index]];
+    [self addResult:[NSString stringWithFormat:@"added action: %@ (%d)", action.name, (int) index]];
 }
 
-- (void)actionRegistry:(LUActionRegistry *)registry didRemoveGroup:(LUActionGroup *)group atIndex:(NSUInteger)index
+- (void)actionRegistry:(LUActionRegistry *)registry didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index
 {
-    [self addResult:[NSString stringWithFormat:@"removed group: %@ (%d)", group.name, (int) index]];
+    [self addResult:[NSString stringWithFormat:@"removed action: %@ (%d)", action.name, (int) index]];
 }
 
-- (void)actionRegistry:(LUActionRegistry *)registry didAddAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex
+- (void)actionRegistry:(LUActionRegistry *)registry didRegisterVariable:(LUCVar *)variable atIndex:(NSUInteger)index
 {
-    [self addResult:[NSString stringWithFormat:@"added: %@/%@ (%d/%d)", action.group.name, action.name, (int) groupIndex, (int) index]];
-}
-
-- (void)actionRegistry:(LUActionRegistry *)registry didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex
-{
-    [self addResult:[NSString stringWithFormat:@"removed: %@/%@ (%d/%d)", action.group.name, action.name, (int) groupIndex, (int) index]];
+    [self addResult:[NSString stringWithFormat:@"register variable: %@ %@ %@ (%d)", [LUCVar typeNameForType:variable.type], variable.name, variable.value, (int) index]];
 }
 
 #pragma mark -
 #pragma mark Helpers
 
-- (LUActionGroup *)findGroupWithName:(NSString *)name
+- (LUAction *)registerActionWithName:(NSString *)name
 {
-    for (LUActionGroup *group in _actionRegistry.groups)
-    {
-        if ([group.name isEqualToString:name])
-        {
-            return group;
-        }
-    }
-    
-    return nil;
+    return [_actionRegistry registerActionWithId:_nextActionId++ name:name];
 }
 
-- (LUAction *)registerActionName:(NSString *)name
+- (LUCVar *)registerVariableWithName:(NSString *)name
 {
-    return [self registerActionGroup:@"" name:name];
+    return [self registerVariableWithName:name type:LUCVarTypeNameString];
 }
 
-- (LUAction *)registerActionGroup:(NSString *)groupName name:(NSString *)name
+- (LUCVar *)registerVariableWithName:(NSString *)name type:(NSString *)typeName
 {
-    return [_actionRegistry registerActionWithId:_nextActionId++ name:name group:groupName];
+    return [self registerVariableWithName:name type:typeName value:@"value"];
+}
+
+- (LUCVar *)registerVariableWithName:(NSString *)name type:(NSString *)typeName value:(NSString *)value
+{
+    return [_actionRegistry registerVariableWithId:_nextActionId++ name:name typeName:typeName value:value];
 }
 
 - (void)unregisterActionWithId:(int)actionId
@@ -332,22 +172,19 @@
 
 - (BOOL)unregisterActionWithName:(NSString *)name
 {
-    for (LUActionGroup *group in _actionRegistry.groups)
+    for (LUAction* action in _actionRegistry.actions)
     {
-        for (LUAction* action in group.actions)
+        if ([action.name isEqualToString:name])
         {
-            if ([action.name isEqualToString:name])
-            {
-                [_actionRegistry unregisterActionWithId:action.actionId];
-                return YES;
-            }
+            [_actionRegistry unregisterActionWithId:action.actionId];
+            return YES;
         }
     }
     
     return NO;
 }
 
-- (void)assertGroups:(NSString *)first, ... NS_REQUIRES_NIL_TERMINATION
+- (void)assertActions:(NSString *)first, ... NS_REQUIRES_NIL_TERMINATION
 {
     NSMutableArray *expected = [NSMutableArray array];
     va_list ap;
@@ -360,21 +197,18 @@
     
     va_end(ap);
     
-    XCTAssertEqual(expected.count, _actionRegistry.groupCount);
+    XCTAssertEqual(expected.count, _actionRegistry.actions.count);
     
     NSUInteger index = 0;
-    for (LUActionGroup *group in _actionRegistry.groups)
+    for (LUAction *action in _actionRegistry.actions)
     {
-        XCTAssertEqualObjects(expected[index], group.name);
+        XCTAssertEqualObjects(expected[index], action.name);
         ++index;
     }
 }
 
-- (void)assertGroup:(NSString *)groupName actions:(NSString *)first, ... NS_REQUIRES_NIL_TERMINATION
+- (void)assertVariables:(NSString *)first, ... NS_REQUIRES_NIL_TERMINATION
 {
-    LUActionGroup *group = [self findGroupWithName:groupName];
-    XCTAssertNotNil(group);
-    
     NSMutableArray *expected = [NSMutableArray array];
     va_list ap;
     va_start(ap, first);
@@ -386,12 +220,12 @@
     
     va_end(ap);
     
-    XCTAssertEqual(expected.count, group.actionCount);
+    XCTAssertEqual(expected.count, _actionRegistry.variables.count);
     
     NSUInteger index = 0;
-    for (LUAction *action in group.actions)
+    for (LUCVar *cvar in _actionRegistry.variables)
     {
-        XCTAssertEqualObjects(expected[index], action.name);
+        XCTAssertEqualObjects(expected[index], cvar.name);
         ++index;
     }
 }

@@ -95,14 +95,12 @@ void __lunar_console_log_message(const char * messageStr, const char * stackTrac
     LU_RELEASE(stackTrace);
 }
 
-void __lunar_console_action_add(int actionId, const char *actionNameStr, const char *actionGroupStr)
+void __lunar_console_action_add(int actionId, const char *actionNameStr)
 {
     NSString *actionName = [[NSString alloc] initWithUTF8String:actionNameStr];
-    NSString *groupName = [[NSString alloc] initWithUTF8String:actionGroupStr];
     lunar_dispatch_main(^{
-        [_lunarConsolePlugin registerActionWithId:actionId name:actionName group:groupName];
+        [_lunarConsolePlugin registerActionWithId:actionId name:actionName];
     });
-    LU_RELEASE(actionName);
     LU_RELEASE(actionName);
 }
 
@@ -110,5 +108,18 @@ void __lunar_console_action_remove(int actionId)
 {
     lunar_dispatch_main(^{
         [_lunarConsolePlugin unregisterActionWithId:actionId];
+    });
+}
+
+void __lunar_console_cvar_add(int entryId, const char *nameStr, const char *typeStr, const char *valueStr)
+{
+    lunar_dispatch_main(^{
+        NSString *name = [NSString stringWithUTF8String:nameStr];
+        NSString *type = [NSString stringWithUTF8String:typeStr];
+        NSString *value = [NSString stringWithUTF8String:valueStr];
+        [_lunarConsolePlugin registerVariableWithId:entryId name:name type:type value:value];
+        LU_RELEASE(name);
+        LU_RELEASE(type);
+        LU_RELEASE(value);
     });
 }

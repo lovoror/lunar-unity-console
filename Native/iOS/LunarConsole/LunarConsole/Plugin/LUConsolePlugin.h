@@ -56,9 +56,9 @@ typedef enum : NSUInteger {
 - (void)logMessage:(NSString *)message stackTrace:(NSString *)stackTrace type:(LUConsoleLogType)type;
 - (void)clear;
 
-- (void)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group;
+- (void)registerActionWithId:(int)actionId name:(NSString *)name;
 - (void)unregisterActionWithId:(int)actionId;
-- (void)unregisterGroupWithName:(NSString *)name;
+- (void)registerVariableWithId:(int)entryId name:(NSString *)name type:(NSString *)type value:(NSString *)value;
 
 - (void)enableGestureRecognition;
 - (void)disableGestureRecognition;

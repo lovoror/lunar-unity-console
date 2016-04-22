@@ -465,6 +465,10 @@ namespace QuickActions
             AddResult("cleared");
         }
 
+        public void OnVariableAdded(QuickActionRegistry registry, CVar cvar)
+        {
+        }
+
         #endregion
 
         #region Helpers

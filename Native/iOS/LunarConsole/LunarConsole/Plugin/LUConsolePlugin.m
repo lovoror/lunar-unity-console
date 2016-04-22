@@ -154,9 +154,9 @@ static const CGFloat kWarningHeight = 45.0f;
 #pragma mark -
 #pragma mark Quick actions
 
-- (void)registerActionWithId:(int)actionId name:(NSString *)name group:(NSString *)group
+- (void)registerActionWithId:(int)actionId name:(NSString *)name
 {
-    [_actionRegistry registerActionWithId:actionId name:name group:group];
+    [_actionRegistry registerActionWithId:actionId name:name];
 }
 
 - (void)unregisterActionWithId:(int)actionId
@@ -164,9 +164,9 @@ static const CGFloat kWarningHeight = 45.0f;
     [_actionRegistry unregisterActionWithId:actionId];
 }
 
-- (void)unregisterGroupWithName:(NSString *)name
+- (void)registerVariableWithId:(int)entryId name:(NSString *)name type:(NSString *)type value:(NSString *)value
 {
-    [_actionRegistry unregisterGroupWithName:name];
+    [_actionRegistry registerVariableWithId:entryId name:name typeName:type value:value];
 }
 
 #pragma mark -

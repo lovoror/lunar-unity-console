@@ -76,7 +76,7 @@ typedef void (^InputCallback)(NSString *input);
             NSArray *actions = [json objectForKey:group];
             for (NSString *action in actions)
             {
-                [plugin registerActionWithId:_nextActionId++ name:action group:group];
+                // FIXME [plugin registerActionWithId:_nextActionId++ name:action group:group];
             }
         }
     }];
@@ -91,20 +91,21 @@ typedef void (^InputCallback)(NSString *input);
         LUConsolePlugin *plugin = [ViewController pluginInstance];
         for (NSString *actionName in json)
         {
-            NSArray *groups = plugin.actionRegistry.groups;
-            for (NSInteger groupIndex = groups.count - 1; groupIndex >= 0; --groupIndex)
-            {
-                LUActionGroup *group = groups[groupIndex];
-                NSArray *actions = group.actions;
-                for (NSInteger actionIndex = actions.count - 1; actionIndex >= 0; --actionIndex)
-                {
-                    LUAction *action = actions[actionIndex];
-                    if ([action.name isEqualToString:actionName])
-                    {
-                        [plugin unregisterActionWithId:action.actionId];
-                    }
-                }
-            }
+            // FIXME
+//            NSArray *groups = plugin.actionRegistry.groups;
+//            for (NSInteger groupIndex = groups.count - 1; groupIndex >= 0; --groupIndex)
+//            {
+//                LUActionGroup *group = groups[groupIndex];
+//                NSArray *actions = group.actions;
+//                for (NSInteger actionIndex = actions.count - 1; actionIndex >= 0; --actionIndex)
+//                {
+//                    LUAction *action = actions[actionIndex];
+//                    if ([action.name isEqualToString:actionName])
+//                    {
+//                        [plugin unregisterActionWithId:action.actionId];
+//                    }
+//                }
+//            }
         }
     }];
 }
@@ -118,7 +119,7 @@ typedef void (^InputCallback)(NSString *input);
         LUConsolePlugin *plugin = [ViewController pluginInstance];
         for (NSString *groupName in json)
         {
-            [plugin unregisterGroupWithName:groupName];
+            // FIXME [plugin unregisterGroupWithName:groupName];
         }
     }];
 }

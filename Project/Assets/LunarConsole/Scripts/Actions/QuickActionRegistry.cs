@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Reflection;
 
+using LunarConsolePlugin;
+
 namespace LunarConsolePluginInternal
 {
     using QuickActionLookup = Dictionary<int, QuickAction>;
     using QuickActionGroupList = MyList<QuickActionGroup>;
     using QuickActionGroupLookup = Dictionary<string, QuickActionGroup>;
+    using CVarList = MyList<CVar>;
 
     delegate bool QuickActionFilter<T>(T cmd) where T : QuickAction;
 
@@ -14,6 +17,7 @@ namespace LunarConsolePluginInternal
     {
         void OnActionAdded(QuickActionRegistry registry, QuickAction action);
         void OnActionRemoved(QuickActionRegistry registry, QuickAction action);
+        void OnVariableAdded(QuickActionRegistry registry, CVar cvar);
     }
 
     public class QuickActionRegistry
@@ -23,6 +27,7 @@ namespace LunarConsolePluginInternal
 
         readonly QuickActionGroupList m_actionGroups = new QuickActionGroupList();
         readonly QuickActionGroupLookup m_actionGroupLookup = new QuickActionGroupLookup();
+        readonly CVarList m_cvars = new CVarList();
 
         #region Commands registry
 
@@ -186,6 +191,20 @@ namespace LunarConsolePluginInternal
 
         #endregion
 
+        #region Variables
+
+        public void Register(CVar cvar)
+        {
+            m_cvars.Add(cvar);
+
+            if (m_delegate != null)
+            {
+                m_delegate.OnVariableAdded(this, cvar);
+            }
+        }
+
+        #endregion
+
         #region Properties
 
         public IQuickActionRegistryDelegate registryDelegate
@@ -197,6 +216,11 @@ namespace LunarConsolePluginInternal
         public QuickActionGroupList actionGroups
         {
             get { return m_actionGroups; }
+        }
+
+        public CVarList cvars
+        {
+            get { return m_cvars; }
         }
 
         #endregion

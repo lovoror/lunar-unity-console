@@ -9,21 +9,31 @@
 /* Begin PBXBuildFile section */
 		840CCCC31BD958B5000A3879 /* LUConsoleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 840CCCC21BD958B5000A3879 /* LUConsoleTest.m */; };
 		840CCCC71BD95B01000A3879 /* TestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 840CCCC61BD95B01000A3879 /* TestCase.m */; };
-		844237881C8C9F8800841728 /* LUActionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 844237871C8C9F8800841728 /* LUActionGroup.m */; };
 		8442378B1C8CA0DD00841728 /* LUSortedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442378A1C8CA0DD00841728 /* LUSortedList.m */; };
 		8442378D1C8CA73100841728 /* LUSortedListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8442378C1C8CA73100841728 /* LUSortedListTest.m */; };
 		844741B51B719C3100F5ABD3 /* libLunarConsole.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 844741A91B719C3100F5ABD3 /* libLunarConsole.a */; };
 		84E5B7BD1B744FA600315599 /* LUConsoleEntryListTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E5B7BC1B744FA600315599 /* LUConsoleEntryListTest.m */; };
 		84F569301C94F7F9007A249F /* LUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F5692F1C94F7F9007A249F /* LUViewController.m */; };
+		EF22F5DA1CC83C9800A726FF /* LUCVarBooleanTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5D91CC83C9800A726FF /* LUCVarBooleanTableViewCell.m */; };
+		EF22F5DD1CC8409E00A726FF /* LUCVarIntegerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5DC1CC8409E00A726FF /* LUCVarIntegerTableViewCell.m */; };
+		EF22F5E01CC8414900A726FF /* LUCVarFloatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5DF1CC8414900A726FF /* LUCVarFloatTableViewCell.m */; };
+		EF22F5E31CC8419700A726FF /* LUCVarStringTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5E21CC8419700A726FF /* LUCVarStringTableViewCell.m */; };
+		EF22F5E61CC8430D00A726FF /* LUCVarInputTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5E51CC8430D00A726FF /* LUCVarInputTableViewCell.m */; };
+		EF22F5E91CC84D6100A726FF /* LUStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5E81CC84D6100A726FF /* LUStringUtils.m */; };
+		EF22F5EB1CC8520300A726FF /* LUStringUtilsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF22F5EA1CC8520300A726FF /* LUStringUtilsTest.m */; };
 		EF322CDD1C59505600F185A9 /* LUConsoleEntryLookupTableTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF322CDC1C59505600F185A9 /* LUConsoleEntryLookupTableTest.m */; };
-		EF3B2DDF1C90E11A00621908 /* LUActionGroupTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3B2DDE1C90E11A00621908 /* LUActionGroupTest.m */; };
-		EF3B2DE41C93825D00621908 /* LUActionRegistryFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3B2DE31C93825D00621908 /* LUActionRegistryFilter.m */; };
 		EF3B2DE61C93854900621908 /* LUActionRegistryFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3B2DE51C93854900621908 /* LUActionRegistryFilterTest.m */; };
+		EF98F63F1CC050F9004943CF /* LUAction.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F62A1CC050F9004943CF /* LUAction.m */; };
+		EF98F6401CC050F9004943CF /* LUActionController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F62C1CC050F9004943CF /* LUActionController.m */; };
+		EF98F6411CC050F9004943CF /* LUActionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F62F1CC050F9004943CF /* LUActionRegistry.m */; };
+		EF98F6421CC050F9004943CF /* LUActionRegistryFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F6311CC050F9004943CF /* LUActionRegistryFilter.m */; };
+		EF98F6431CC050F9004943CF /* LUActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F6331CC050F9004943CF /* LUActionTableViewCell.m */; };
+		EF98F6441CC050F9004943CF /* LUEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F6351CC050F9004943CF /* LUEntry.m */; };
+		EF98F6451CC050F9004943CF /* LUEntryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F6371CC050F9004943CF /* LUEntryTableViewCell.m */; };
+		EF98F6461CC050F9004943CF /* LUCVar.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F63A1CC050F9004943CF /* LUCVar.m */; };
+		EF98F6471CC050F9004943CF /* LUCVarFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F63C1CC050F9004943CF /* LUCVarFactory.m */; };
+		EF98F6481CC050F9004943CF /* LUCVarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF98F63E1CC050F9004943CF /* LUCVarTableViewCell.m */; };
 		EFE1B8B21C03DFD100CFA420 /* LUStacktraceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE1B8B11C03DFD100CFA420 /* LUStacktraceTest.m */; };
-		EFF633941C7E6F73005E1B46 /* LUAction.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF633201C7E6F72005E1B46 /* LUAction.m */; };
-		EFF633951C7E6F73005E1B46 /* LUActionController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF633221C7E6F72005E1B46 /* LUActionController.m */; };
-		EFF633961C7E6F73005E1B46 /* LUActionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF633251C7E6F72005E1B46 /* LUActionRegistry.m */; };
-		EFF633971C7E6F73005E1B46 /* LUActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF633271C7E6F72005E1B46 /* LUActionTableViewCell.m */; };
 		EFF633981C7E6F73005E1B46 /* LUConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF6332A1C7E6F72005E1B46 /* LUConsole.m */; };
 		EFF633991C7E6F73005E1B46 /* LUConsoleLogController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF6332C1C7E6F72005E1B46 /* LUConsoleLogController.m */; };
 		EFF6339A1C7E6F73005E1B46 /* LUConsoleLogDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF6332F1C7E6F72005E1B46 /* LUConsoleLogDetailsController.m */; };
@@ -79,8 +89,6 @@
 		840CCCC21BD958B5000A3879 /* LUConsoleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUConsoleTest.m; sourceTree = "<group>"; };
 		840CCCC51BD95B01000A3879 /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCase.h; sourceTree = "<group>"; };
 		840CCCC61BD95B01000A3879 /* TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCase.m; sourceTree = "<group>"; };
-		844237861C8C9F8800841728 /* LUActionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionGroup.h; sourceTree = "<group>"; };
-		844237871C8C9F8800841728 /* LUActionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionGroup.m; sourceTree = "<group>"; };
 		844237891C8CA0DD00841728 /* LUSortedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUSortedList.h; sourceTree = "<group>"; };
 		8442378A1C8CA0DD00841728 /* LUSortedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUSortedList.m; sourceTree = "<group>"; };
 		8442378C1C8CA73100841728 /* LUSortedListTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUSortedListTest.m; sourceTree = "<group>"; };
@@ -93,21 +101,45 @@
 		84E5B7BC1B744FA600315599 /* LUConsoleEntryListTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUConsoleEntryListTest.m; sourceTree = "<group>"; };
 		84F5692E1C94F7F9007A249F /* LUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUViewController.h; sourceTree = "<group>"; };
 		84F5692F1C94F7F9007A249F /* LUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUViewController.m; sourceTree = "<group>"; };
+		EF22F5D71CC83B9700A726FF /* LUCVarInputTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LUCVarInputTableViewCell.xib; sourceTree = "<group>"; };
+		EF22F5D81CC83C9800A726FF /* LUCVarBooleanTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarBooleanTableViewCell.h; sourceTree = "<group>"; };
+		EF22F5D91CC83C9800A726FF /* LUCVarBooleanTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarBooleanTableViewCell.m; sourceTree = "<group>"; };
+		EF22F5DB1CC8409E00A726FF /* LUCVarIntegerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarIntegerTableViewCell.h; sourceTree = "<group>"; };
+		EF22F5DC1CC8409E00A726FF /* LUCVarIntegerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarIntegerTableViewCell.m; sourceTree = "<group>"; };
+		EF22F5DE1CC8414900A726FF /* LUCVarFloatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarFloatTableViewCell.h; sourceTree = "<group>"; };
+		EF22F5DF1CC8414900A726FF /* LUCVarFloatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarFloatTableViewCell.m; sourceTree = "<group>"; };
+		EF22F5E11CC8419700A726FF /* LUCVarStringTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarStringTableViewCell.h; sourceTree = "<group>"; };
+		EF22F5E21CC8419700A726FF /* LUCVarStringTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarStringTableViewCell.m; sourceTree = "<group>"; };
+		EF22F5E41CC8430D00A726FF /* LUCVarInputTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarInputTableViewCell.h; sourceTree = "<group>"; };
+		EF22F5E51CC8430D00A726FF /* LUCVarInputTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarInputTableViewCell.m; sourceTree = "<group>"; };
+		EF22F5E71CC84D6100A726FF /* LUStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUStringUtils.h; sourceTree = "<group>"; };
+		EF22F5E81CC84D6100A726FF /* LUStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUStringUtils.m; sourceTree = "<group>"; };
+		EF22F5EA1CC8520300A726FF /* LUStringUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUStringUtilsTest.m; sourceTree = "<group>"; };
 		EF322CDC1C59505600F185A9 /* LUConsoleEntryLookupTableTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUConsoleEntryLookupTableTest.m; sourceTree = "<group>"; };
-		EF3B2DDE1C90E11A00621908 /* LUActionGroupTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionGroupTest.m; sourceTree = "<group>"; };
-		EF3B2DE21C93825D00621908 /* LUActionRegistryFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionRegistryFilter.h; sourceTree = "<group>"; };
-		EF3B2DE31C93825D00621908 /* LUActionRegistryFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionRegistryFilter.m; sourceTree = "<group>"; };
 		EF3B2DE51C93854900621908 /* LUActionRegistryFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionRegistryFilterTest.m; sourceTree = "<group>"; };
+		EF98F6291CC050F9004943CF /* LUAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUAction.h; sourceTree = "<group>"; };
+		EF98F62A1CC050F9004943CF /* LUAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUAction.m; sourceTree = "<group>"; };
+		EF98F62B1CC050F9004943CF /* LUActionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionController.h; sourceTree = "<group>"; };
+		EF98F62C1CC050F9004943CF /* LUActionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionController.m; sourceTree = "<group>"; };
+		EF98F62D1CC050F9004943CF /* LUActionController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LUActionController.xib; sourceTree = "<group>"; };
+		EF98F62E1CC050F9004943CF /* LUActionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionRegistry.h; sourceTree = "<group>"; };
+		EF98F62F1CC050F9004943CF /* LUActionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionRegistry.m; sourceTree = "<group>"; };
+		EF98F6301CC050F9004943CF /* LUActionRegistryFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionRegistryFilter.h; sourceTree = "<group>"; };
+		EF98F6311CC050F9004943CF /* LUActionRegistryFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionRegistryFilter.m; sourceTree = "<group>"; };
+		EF98F6321CC050F9004943CF /* LUActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionTableViewCell.h; sourceTree = "<group>"; };
+		EF98F6331CC050F9004943CF /* LUActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionTableViewCell.m; sourceTree = "<group>"; };
+		EF98F6341CC050F9004943CF /* LUEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUEntry.h; sourceTree = "<group>"; };
+		EF98F6351CC050F9004943CF /* LUEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUEntry.m; sourceTree = "<group>"; };
+		EF98F6361CC050F9004943CF /* LUEntryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUEntryTableViewCell.h; sourceTree = "<group>"; };
+		EF98F6371CC050F9004943CF /* LUEntryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUEntryTableViewCell.m; sourceTree = "<group>"; };
+		EF98F6391CC050F9004943CF /* LUCVar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVar.h; sourceTree = "<group>"; };
+		EF98F63A1CC050F9004943CF /* LUCVar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVar.m; sourceTree = "<group>"; };
+		EF98F63B1CC050F9004943CF /* LUCVarFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarFactory.h; sourceTree = "<group>"; };
+		EF98F63C1CC050F9004943CF /* LUCVarFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarFactory.m; sourceTree = "<group>"; };
+		EF98F63D1CC050F9004943CF /* LUCVarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUCVarTableViewCell.h; sourceTree = "<group>"; };
+		EF98F63E1CC050F9004943CF /* LUCVarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUCVarTableViewCell.m; sourceTree = "<group>"; };
+		EF98F64C1CC05ED1004943CF /* LUCVarBooleanTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LUCVarBooleanTableViewCell.xib; sourceTree = "<group>"; };
 		EFE1B8B11C03DFD100CFA420 /* LUStacktraceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUStacktraceTest.m; sourceTree = "<group>"; };
-		EFF6331F1C7E6F72005E1B46 /* LUAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUAction.h; sourceTree = "<group>"; };
-		EFF633201C7E6F72005E1B46 /* LUAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUAction.m; sourceTree = "<group>"; };
-		EFF633211C7E6F72005E1B46 /* LUActionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionController.h; sourceTree = "<group>"; };
-		EFF633221C7E6F72005E1B46 /* LUActionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionController.m; sourceTree = "<group>"; };
-		EFF633231C7E6F72005E1B46 /* LUActionController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LUActionController.xib; sourceTree = "<group>"; };
-		EFF633241C7E6F72005E1B46 /* LUActionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionRegistry.h; sourceTree = "<group>"; };
-		EFF633251C7E6F72005E1B46 /* LUActionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionRegistry.m; sourceTree = "<group>"; };
-		EFF633261C7E6F72005E1B46 /* LUActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUActionTableViewCell.h; sourceTree = "<group>"; };
-		EFF633271C7E6F72005E1B46 /* LUActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUActionTableViewCell.m; sourceTree = "<group>"; };
 		EFF633291C7E6F72005E1B46 /* LUConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUConsole.h; sourceTree = "<group>"; };
 		EFF6332A1C7E6F72005E1B46 /* LUConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUConsole.m; sourceTree = "<group>"; };
 		EFF6332B1C7E6F72005E1B46 /* LUConsoleLogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUConsoleLogController.h; sourceTree = "<group>"; };
@@ -267,7 +299,6 @@
 			isa = PBXGroup;
 			children = (
 				840CCCC41BD95AE6000A3879 /* Helpers */,
-				EF3B2DDE1C90E11A00621908 /* LUActionGroupTest.m */,
 				EF3B2DE51C93854900621908 /* LUActionRegistryFilterTest.m */,
 				EFFE6F1A1C7E3A2900964D19 /* LUActionRegistryTest.m */,
 				84E5B7BC1B744FA600315599 /* LUConsoleEntryListTest.m */,
@@ -276,6 +307,7 @@
 				EFFF63221B7553EC001E6E1E /* LUMutableArrayTest.m */,
 				8442378C1C8CA73100841728 /* LUSortedListTest.m */,
 				EFE1B8B11C03DFD100CFA420 /* LUStacktraceTest.m */,
+				EF22F5EA1CC8520300A726FF /* LUStringUtilsTest.m */,
 				844741B91B719C3100F5ABD3 /* Supporting Files */,
 			);
 			path = LunarConsoleTests;
@@ -292,8 +324,8 @@
 		844741C31B719CF600F5ABD3 /* LunarConsole */ = {
 			isa = PBXGroup;
 			children = (
-				EFF6331E1C7E6F72005E1B46 /* Actions */,
 				EFF633281C7E6F72005E1B46 /* Console */,
+				EF98F6271CC050F9004943CF /* Entries */,
 				EFF6333E1C7E6F72005E1B46 /* Images */,
 				EFF6336F1C7E6F72005E1B46 /* Lunar.h */,
 				EFF633701C7E6F72005E1B46 /* Plugin */,
@@ -304,24 +336,60 @@
 			path = LunarConsole;
 			sourceTree = "<group>";
 		};
-		EFF6331E1C7E6F72005E1B46 /* Actions */ = {
+		EF98F6271CC050F9004943CF /* Entries */ = {
 			isa = PBXGroup;
 			children = (
-				EFF6331F1C7E6F72005E1B46 /* LUAction.h */,
-				EFF633201C7E6F72005E1B46 /* LUAction.m */,
-				EFF633211C7E6F72005E1B46 /* LUActionController.h */,
-				EFF633221C7E6F72005E1B46 /* LUActionController.m */,
-				EFF633231C7E6F72005E1B46 /* LUActionController.xib */,
-				844237861C8C9F8800841728 /* LUActionGroup.h */,
-				844237871C8C9F8800841728 /* LUActionGroup.m */,
-				EFF633241C7E6F72005E1B46 /* LUActionRegistry.h */,
-				EFF633251C7E6F72005E1B46 /* LUActionRegistry.m */,
-				EFF633261C7E6F72005E1B46 /* LUActionTableViewCell.h */,
-				EFF633271C7E6F72005E1B46 /* LUActionTableViewCell.m */,
-				EF3B2DE21C93825D00621908 /* LUActionRegistryFilter.h */,
-				EF3B2DE31C93825D00621908 /* LUActionRegistryFilter.m */,
+				EF98F6281CC050F9004943CF /* Actions */,
+				EF98F6381CC050F9004943CF /* Variables */,
+				EF98F6341CC050F9004943CF /* LUEntry.h */,
+				EF98F6351CC050F9004943CF /* LUEntry.m */,
+				EF98F6361CC050F9004943CF /* LUEntryTableViewCell.h */,
+				EF98F6371CC050F9004943CF /* LUEntryTableViewCell.m */,
+			);
+			path = Entries;
+			sourceTree = "<group>";
+		};
+		EF98F6281CC050F9004943CF /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				EF98F6291CC050F9004943CF /* LUAction.h */,
+				EF98F62A1CC050F9004943CF /* LUAction.m */,
+				EF98F62B1CC050F9004943CF /* LUActionController.h */,
+				EF98F62C1CC050F9004943CF /* LUActionController.m */,
+				EF98F62D1CC050F9004943CF /* LUActionController.xib */,
+				EF98F62E1CC050F9004943CF /* LUActionRegistry.h */,
+				EF98F62F1CC050F9004943CF /* LUActionRegistry.m */,
+				EF98F6301CC050F9004943CF /* LUActionRegistryFilter.h */,
+				EF98F6311CC050F9004943CF /* LUActionRegistryFilter.m */,
+				EF98F6321CC050F9004943CF /* LUActionTableViewCell.h */,
+				EF98F6331CC050F9004943CF /* LUActionTableViewCell.m */,
 			);
 			path = Actions;
+			sourceTree = "<group>";
+		};
+		EF98F6381CC050F9004943CF /* Variables */ = {
+			isa = PBXGroup;
+			children = (
+				EF98F6391CC050F9004943CF /* LUCVar.h */,
+				EF98F63A1CC050F9004943CF /* LUCVar.m */,
+				EF22F5D81CC83C9800A726FF /* LUCVarBooleanTableViewCell.h */,
+				EF22F5D91CC83C9800A726FF /* LUCVarBooleanTableViewCell.m */,
+				EF98F64C1CC05ED1004943CF /* LUCVarBooleanTableViewCell.xib */,
+				EF98F63B1CC050F9004943CF /* LUCVarFactory.h */,
+				EF98F63C1CC050F9004943CF /* LUCVarFactory.m */,
+				EF22F5DE1CC8414900A726FF /* LUCVarFloatTableViewCell.h */,
+				EF22F5DF1CC8414900A726FF /* LUCVarFloatTableViewCell.m */,
+				EF22F5E41CC8430D00A726FF /* LUCVarInputTableViewCell.h */,
+				EF22F5E51CC8430D00A726FF /* LUCVarInputTableViewCell.m */,
+				EF22F5D71CC83B9700A726FF /* LUCVarInputTableViewCell.xib */,
+				EF22F5DB1CC8409E00A726FF /* LUCVarIntegerTableViewCell.h */,
+				EF22F5DC1CC8409E00A726FF /* LUCVarIntegerTableViewCell.m */,
+				EF22F5E11CC8419700A726FF /* LUCVarStringTableViewCell.h */,
+				EF22F5E21CC8419700A726FF /* LUCVarStringTableViewCell.m */,
+				EF98F63D1CC050F9004943CF /* LUCVarTableViewCell.h */,
+				EF98F63E1CC050F9004943CF /* LUCVarTableViewCell.m */,
+			);
+			path = Variables;
 			sourceTree = "<group>";
 		};
 		EFF633281C7E6F72005E1B46 /* Console */ = {
@@ -461,6 +529,8 @@
 				8442378A1C8CA0DD00841728 /* LUSortedList.m */,
 				EFF6338C1C7E6F73005E1B46 /* LUStacktrace.h */,
 				EFF6338D1C7E6F73005E1B46 /* LUStacktrace.m */,
+				EF22F5E71CC84D6100A726FF /* LUStringUtils.h */,
+				EF22F5E81CC84D6100A726FF /* LUStringUtils.m */,
 				EFF6338E1C7E6F73005E1B46 /* LUThreading.h */,
 				EFF6338F1C7E6F73005E1B46 /* LUThreading.m */,
 			);
@@ -565,35 +635,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF98F6441CC050F9004943CF /* LUEntry.m in Sources */,
+				EF98F63F1CC050F9004943CF /* LUAction.m in Sources */,
 				EFF633A51C7E6F73005E1B46 /* LUTheme.m in Sources */,
-				EFF633971C7E6F73005E1B46 /* LUActionTableViewCell.m in Sources */,
 				EFF633C91C8128D7005E1B46 /* LUConsolePluginController.m in Sources */,
 				EFF633A71C7E6F73005E1B46 /* LUWindow.m in Sources */,
+				EF22F5E91CC84D6100A726FF /* LUStringUtils.m in Sources */,
+				EF22F5E61CC8430D00A726FF /* LUCVarInputTableViewCell.m in Sources */,
 				EFF633A91C7E6F73005E1B46 /* LUAvailability.m in Sources */,
 				EFF633A81C7E6F73005E1B46 /* LUAssert.m in Sources */,
 				EFF633AB1C7E6F73005E1B46 /* LUMutableArray.m in Sources */,
 				EFF6339B1C7E6F73005E1B46 /* LUConsoleLogEntry.m in Sources */,
 				EFF633A21C7E6F73005E1B46 /* lunar_unity_native_interface.m in Sources */,
+				EF98F6411CC050F9004943CF /* LUActionRegistry.m in Sources */,
+				EF22F5E31CC8419700A726FF /* LUCVarStringTableViewCell.m in Sources */,
 				EFF6339C1C7E6F73005E1B46 /* LUConsoleLogEntryList.m in Sources */,
-				844237881C8C9F8800841728 /* LUActionGroup.m in Sources */,
 				EFF6339A1C7E6F73005E1B46 /* LUConsoleLogDetailsController.m in Sources */,
+				EF98F6421CC050F9004943CF /* LUActionRegistryFilter.m in Sources */,
 				EFF633AA1C7E6F73005E1B46 /* LULittleHelper.m in Sources */,
 				EFF633AF1C7E6F73005E1B46 /* LUExceptionWarningController.m in Sources */,
 				84F569301C94F7F9007A249F /* LUViewController.m in Sources */,
-				EFF633961C7E6F73005E1B46 /* LUActionRegistry.m in Sources */,
+				EF98F6401CC050F9004943CF /* LUActionController.m in Sources */,
 				EFF633A61C7E6F73005E1B46 /* LUToggleButton.m in Sources */,
-				EFF633951C7E6F73005E1B46 /* LUActionController.m in Sources */,
-				EF3B2DE41C93825D00621908 /* LUActionRegistryFilter.m in Sources */,
 				EFF6339E1C7E6F73005E1B46 /* LUConsoleLogEntryTableViewCell.m in Sources */,
-				EFF633941C7E6F73005E1B46 /* LUAction.m in Sources */,
 				EFF633991C7E6F73005E1B46 /* LUConsoleLogController.m in Sources */,
+				EF98F6431CC050F9004943CF /* LUActionTableViewCell.m in Sources */,
 				EFF633A11C7E6F73005E1B46 /* LUConsolePlugin.m in Sources */,
 				EFF633AE1C7E6F73005E1B46 /* LUThreading.m in Sources */,
+				EF22F5DD1CC8409E00A726FF /* LUCVarIntegerTableViewCell.m in Sources */,
 				EFF633AC1C7E6F73005E1B46 /* LUObject.m in Sources */,
+				EF22F5DA1CC83C9800A726FF /* LUCVarBooleanTableViewCell.m in Sources */,
+				EF98F6461CC050F9004943CF /* LUCVar.m in Sources */,
+				EF98F6451CC050F9004943CF /* LUEntryTableViewCell.m in Sources */,
+				EF98F6471CC050F9004943CF /* LUCVarFactory.m in Sources */,
+				EF98F6481CC050F9004943CF /* LUCVarTableViewCell.m in Sources */,
 				8442378B1C8CA0DD00841728 /* LUSortedList.m in Sources */,
 				EFF633A31C7E6F73005E1B46 /* LUUnityScriptMessenger.m in Sources */,
 				EFF6339F1C7E6F73005E1B46 /* LUConsoleLogMenuController.m in Sources */,
 				EFF6339D1C7E6F73005E1B46 /* LUConsoleLogEntryLookupTable.m in Sources */,
+				EF22F5E01CC8414900A726FF /* LUCVarFloatTableViewCell.m in Sources */,
 				EFF633981C7E6F73005E1B46 /* LUConsole.m in Sources */,
 				EFF633A41C7E6F73005E1B46 /* LUTableView.m in Sources */,
 				EFF633A01C7E6F73005E1B46 /* LUConsoleLogTypeButton.m in Sources */,
@@ -612,9 +692,9 @@
 				8442378D1C8CA73100841728 /* LUSortedListTest.m in Sources */,
 				EF322CDD1C59505600F185A9 /* LUConsoleEntryLookupTableTest.m in Sources */,
 				84E5B7BD1B744FA600315599 /* LUConsoleEntryListTest.m in Sources */,
+				EF22F5EB1CC8520300A726FF /* LUStringUtilsTest.m in Sources */,
 				EFE1B8B21C03DFD100CFA420 /* LUStacktraceTest.m in Sources */,
 				EFFF63231B7553EC001E6E1E /* LUMutableArrayTest.m in Sources */,
-				EF3B2DDF1C90E11A00621908 /* LUActionGroupTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

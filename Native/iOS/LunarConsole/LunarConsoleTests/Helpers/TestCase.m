@@ -31,6 +31,16 @@
     
     LU_RELEASE(_result);
     _result = [NSMutableArray new];
+    
+    LUAssertSetHandler(^(NSString *message) {
+        XCTFail(@"%@", message);
+    });
+}
+
+- (void)tearDown
+{
+    LUAssertSetHandler(nil);
+    [super tearDown];
 }
 
 #pragma mark -

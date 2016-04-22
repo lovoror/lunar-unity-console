@@ -14,10 +14,9 @@
 
 @protocol LUActionRegistryFilterDelegate <NSObject>
 
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddGroup:(LUActionGroup *)group atIndex:(NSUInteger)index;
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveGroup:(LUActionGroup *)group atIndex:(NSUInteger)index;
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex;
-- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index groupIndex:(NSUInteger)groupIndex;
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didAddAction:(LUAction *)action atIndex:(NSUInteger)index;
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registryFilter didRemoveAction:(LUAction *)action atIndex:(NSUInteger)index;
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registry didRegisterVariable:(LUCVar *)variable atIndex:(NSUInteger)index;
 
 @end
 
@@ -26,12 +25,12 @@
 @property (nonatomic, readonly) LUActionRegistry *registry;
 @property (nonatomic, readonly) BOOL isFiltering;
 @property (nonatomic, assign) id<LUActionRegistryFilterDelegate> delegate;
-@property (nonatomic, readonly) NSUInteger groupCount;
+@property (nonatomic, readonly) NSArray *actions;
+@property (nonatomic, readonly) NSArray *variables;
 
 + (instancetype)filterWithActionRegistry:(LUActionRegistry *)actionRegistry;
 - (instancetype)initWithActionRegistry:(LUActionRegistry *)actionRegistry;
 
 - (BOOL)setFilterText:(NSString *)filterText;
-- (LUActionGroup *)groupAtIndex:(NSInteger)index;
 
 @end

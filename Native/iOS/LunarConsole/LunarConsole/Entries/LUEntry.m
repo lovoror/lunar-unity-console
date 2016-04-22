@@ -1,21 +1,16 @@
 //
-//  LUAction.m
+//  LUEntry.m
 //  LunarConsole
 //
-//  Created by Alex Lementuev on 2/24/16.
+//  Created by Alex Lementuev on 4/1/16.
 //  Copyright © 2016 Space Madness. All rights reserved.
 //
 
+#import "LUEntry.h"
+
 #import "Lunar.h"
 
-#import "LUAction.h"
-
-@implementation LUAction
-
-+ (instancetype)actionWithId:(int)actionId name:(NSString *)name
-{
-    return LU_AUTORELEASE([[self alloc] initWithId:actionId name:name]);
-}
+@implementation LUEntry
 
 - (instancetype)initWithId:(int)actionId name:(NSString *)name
 {
@@ -24,7 +19,7 @@
     {
         if (name.length == 0)
         {
-            NSLog(@"Can't create an action: title is nil or empty");
+            NSLog(@"Can't create an entry: name is nil or empty");
             LU_RELEASE(self);
             self = nil;
             return nil;
@@ -55,10 +50,10 @@
 
 - (BOOL)isEqual:(id)object
 {
-    if ([object isKindOfClass:[LUAction class]])
+    if ([object isKindOfClass:[LUEntry class]])
     {
-        LUAction *action = object;
-        return _actionId == action.actionId && [_name isEqualToString:action.name];
+        LUEntry *entry = object;
+        return self.actionId == entry.actionId && [self.name isEqualToString:entry.name];
     }
     
     return NO;
@@ -69,15 +64,22 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%d: %@", _actionId, _name];
+    return [NSString stringWithFormat:@"%d: %@", self.actionId, self.name];
 }
 
 #pragma mark -
-#pragma mark Properties
+#pragma mark UITableView
 
-- (NSString *)groupName
+- (UITableViewCell *)tableView:(UITableView *)tableView cellAtIndex:(NSUInteger)index
 {
-    return _group.name;
+    LU_SHOULD_IMPLEMENT_METHOD
+    return nil;
+}
+
+- (CGSize)cellSizeForTableView:(UITableView *)tableView
+{
+    LU_SHOULD_IMPLEMENT_METHOD
+    return CGSizeMake(CGRectGetWidth(tableView.bounds), 44);
 }
 
 @end

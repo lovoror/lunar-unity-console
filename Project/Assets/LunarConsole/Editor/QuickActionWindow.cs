@@ -17,7 +17,12 @@ namespace LunarConsolePluginInternal
 
         public QuickActionWindow()
         {
+            #if UNITY_5_0
+            this.title = "Quick Actions";
+            #else
             this.titleContent = new GUIContent("Quick Actions");
+            #endif
+
         }
 
         void OnGUI()
@@ -34,9 +39,15 @@ namespace LunarConsolePluginInternal
                 {
                     OnActionGroupGUI(actionGroup);
                 }
+                foreach (var cvar in registry.cvars)
+                {
+                    OnCVarGUI(cvar);
+                }
                 GUILayout.EndScrollView();
             }
         }
+
+        #region Actions
 
         void OnActionGroupGUI(QuickActionGroup actionGroup)
         {
@@ -58,5 +69,99 @@ namespace LunarConsolePluginInternal
                 Debug.Log(action.id);
             }
         }
+
+        #endregion
+
+        #region CVars
+
+        void OnCVarGUI(CVar cvar)
+        {
+            switch (cvar.Type)
+            {
+                case CVarType.Boolean:
+                {
+                    bool value = EditorGUILayout.Toggle(cvar.Name, cvar.BoolValue);
+                    if (value != cvar.BoolValue)
+                    {
+                        cvar.BoolValue = value;
+                    }
+                    break;
+                }
+                case CVarType.Integer:
+                {
+                    int value = EditorGUILayout.IntField(cvar.Name, cvar.IntValue);
+                    if (value != cvar.IntValue)
+                    {
+                        cvar.IntValue = value;
+                    }
+                    break;
+                }
+                case CVarType.Float:
+                {
+                    float value = EditorGUILayout.FloatField(cvar.Name, cvar.FloatValue);
+                    if (value != cvar.FloatValue)
+                    {
+                        cvar.FloatValue = value;
+                    }
+                    break;
+                }
+                case CVarType.String:
+                {
+                    string value = EditorGUILayout.TextField(cvar.Name, cvar.Value);
+                    if (value != cvar.Value)
+                    {
+                        cvar.Value = value;
+                    }
+                    break;
+                }
+                case CVarType.Color:
+                {
+                    Color value = EditorGUILayout.ColorField(cvar.Name, cvar.ColorValue);
+                    if (value != cvar.ColorValue)
+                    {
+                        cvar.ColorValue = value;
+                    }
+                    break;
+                }
+                case CVarType.Rect:
+                {
+                    Rect value = EditorGUILayout.RectField(cvar.Name, cvar.RectValue);
+                    if (value != cvar.RectValue)
+                    {
+                        cvar.RectValue = value;
+                    }
+                    break;
+                }
+                case CVarType.Vector2:
+                {
+                    Vector2 value = EditorGUILayout.Vector2Field(cvar.Name, cvar.Vector2Value);
+                    if (value != cvar.Vector2Value)
+                    {
+                        cvar.Vector2Value = value;
+                    }
+                    break;
+                }
+                case CVarType.Vector3:
+                {
+                    Vector3 value = EditorGUILayout.Vector3Field(cvar.Name, cvar.Vector3Value);
+                    if (value != cvar.Vector3Value)
+                    {
+                        cvar.Vector3Value = value;
+                    }
+                    break;
+                }
+                case CVarType.Vector4:
+                {
+                    Vector4 value = EditorGUILayout.Vector4Field(cvar.Name, cvar.Vector4Value);
+                    if (value != cvar.Vector4Value)
+                    {
+                        cvar.Vector4Value = value;
+                    }
+                    break;
+                }
+            }
+        }
+
+        #endregion
     }
 }
