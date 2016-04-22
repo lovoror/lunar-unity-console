@@ -55,6 +55,7 @@ namespace LunarConsolePlugin
     }
 
     delegate void LunarConsoleNativeMessageCallback(string message);
+    delegate void LunarConsoleNativeMessageHandler(IDictionary<string, string> data);
 
     public class LunarConsole : MonoBehaviour
     {
@@ -84,6 +85,7 @@ namespace LunarConsolePlugin
         #if LUNAR_CONSOLE_ENABLED
 
         IPlatform m_platform;
+        IDictionary<string, LunarConsoleNativeMessageHandler> m_nativeHandlerLookup;
 
         #region Static initialization
 
@@ -176,13 +178,13 @@ namespace LunarConsolePlugin
             #if UNITY_IOS || UNITY_IPHONE
             if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                LunarConsoleNativeMessageCallback callback = OnNativeMessage;
+                LunarConsoleNativeMessageCallback callback = NativeMessageCallback;
                 return new PlatformIOS(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(m_gesture));
             }
             #elif UNITY_ANDROID
             if (Application.platform == RuntimePlatform.Android)
             {
-                LunarConsoleNativeMessageCallback callback = OnNativeMessage;
+                LunarConsoleNativeMessageCallback callback = NativeMessageCallback;
                 return new PlatformAndroid(gameObject.name, callback.Method.Name, Constants.Version, capacity, trim, GetGestureName(m_gesture));
             }
             #endif
@@ -444,23 +446,97 @@ namespace LunarConsolePlugin
 
         #region Native callback
 
-        void OnNativeMessage(string message)
+        void NativeMessageCallback(string param)
         {
-            string[] tokens = message.Split(':');
-            string name = tokens[0];
-            string value = tokens[1];
-            if (name == "action")
+            IDictionary<string, string> data = ParseCallbackData(param);
+            string name = data["name"];
+            if (string.IsNullOrEmpty(name))
             {
-                int actionId = StringUtils.ParseInt(value, -1);
-                if (actionId != -1)
+                Debug.LogError("Can't handle native callback: 'name' is undefined");
+                return;
+            }
+
+            LunarConsoleNativeMessageHandler handler;
+            if (!nativeHandlerLookup.TryGetValue(name, out handler))
+            {
+                Debug.LogError("Can't handle native callback: handler not found '" + name + "'");
+                return;
+            }
+
+            try
+            {
+                handler(data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Exception while handling native callback (" + name + "): " + e.Message);
+            }
+        }
+
+        IDictionary<string, LunarConsoleNativeMessageHandler> nativeHandlerLookup
+        {
+            get
+            {
+                if (m_nativeHandlerLookup == null)
                 {
-                    QuickAction action = s_actionRegistry.FindAction(actionId);
-                    if (action != null)
-                    {
-                        action.Execute();
-                    }
+                    m_nativeHandlerLookup = new Dictionary<string, LunarConsoleNativeMessageHandler>();
+                    m_nativeHandlerLookup["action"] = QuickActionHandler;
+                    m_nativeHandlerLookup["variable"] = ConsoleVariableHandler;
+                }
+
+                return m_nativeHandlerLookup;
+            }
+        }
+
+        void QuickActionHandler(IDictionary<string, string> data)
+        {
+            int actionId = StringUtils.ParseInt(data["actionId"], -1);
+            if (actionId != -1)
+            {
+                QuickAction action = s_actionRegistry.FindAction(actionId);
+                if (action != null)
+                {
+                    action.Execute();
+                }
+                else
+                {
+                    Debug.LogError("Can't execute quick action: can't find action with id " + actionId);
                 }
             }
+            else
+            {
+                Debug.LogError("Can't execute quick action: actionId is undefined");
+            }
+        }
+
+        void ConsoleVariableHandler(IDictionary<string, string> data)
+        {
+            int variableId = StringUtils.ParseInt(data["variableId"], -1);
+            if (variableId != -1)
+            {
+                throw new NotImplementedException("Implement mes");
+            }
+            else
+            {
+                Debug.LogError("Can't change console variable: variableId is undefined");
+            }
+        }
+
+        // TODO: extract into a separate class and add unit tests
+        static IDictionary<string, string> ParseCallbackData(string data)
+        {
+            // can't use Json here since Unity doesn't support Json-to-dictionary deserialization
+            // don't want to use 3rd party so custom format it is
+            string[] lines = data.Split('\n');
+            IDictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (string line in lines)
+            {
+                int index = line.IndexOf(':');
+                string key = line.Substring(0, index);
+                string value = line.Substring(index + 1, line.Length - (index + 1)).Replace(@"\n", "\n"); // restore new lines
+                dict[key] = value;
+            }
+            return dict;
         }
 
         #endregion
