@@ -169,6 +169,11 @@ static const CGFloat kWarningHeight = 45.0f;
     [_actionRegistry registerVariableWithId:entryId name:name typeName:type value:value];
 }
 
+- (void)setValue:(NSString *)value forVariableWithId:(int)variableId
+{
+    [_actionRegistry setValue:value forVariableWithId:variableId];
+}
+
 #pragma mark -
 #pragma mark Warnings
 
@@ -238,7 +243,9 @@ static const CGFloat kWarningHeight = 45.0f;
 
 - (void)pluginController:(LUConsolePluginController *)controller didSelectActionWithId:(int)actionId
 {
-    [_scriptMessenger sendMessage:[NSString stringWithFormat:@"action:%d", actionId]]; // TODO: replace with JSON
+    [_scriptMessenger sendMessageName:@"action" params:@{
+        @"actionId" : @(actionId)
+    }];
 }
 
 - (void)pluginControllerDidClose:(LUConsolePluginController *)controller

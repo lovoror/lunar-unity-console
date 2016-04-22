@@ -218,6 +218,21 @@
     [_delegate actionRegistryFilter:self didRegisterVariable:variable atIndex:index];
 }
 
+- (void)actionRegistry:(LUActionRegistry *)registry didDidChangeVariable:(LUCVar *)variable atIndex:(NSUInteger)index
+{
+    if (self.isFiltering)
+    {
+        if (![self filterEntry:variable])
+        {
+            return;
+        }
+        
+        index = [self filteredArray:_filteredVariables indexOfEntry:variable];
+    }
+    
+    [_delegate actionRegistryFilter:self didChangeVariable:variable atIndex:index];
+}
+
 #pragma mark -
 #pragma mark Properties
 

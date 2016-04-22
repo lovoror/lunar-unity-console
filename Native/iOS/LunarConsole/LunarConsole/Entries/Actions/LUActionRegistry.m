@@ -111,17 +111,41 @@
     return variable;
 }
 
-- (LUCVar *)variableWithId:(int)variableId
+- (void)setValue:(NSString *)value forVariableWithId:(int)variableId
 {
+    NSUInteger index = [self indexOfVariableWithId:variableId];
+    if (index != NSNotFound)
+    {
+        LUCVar *cvar = [_variables objectAtIndex:index];
+        cvar.value = value;
+        [_delegate actionRegistry:self didDidChangeVariable:cvar atIndex:index];
+    }
+    else
+    {
+        NSLog(@"Can't server cvar value: variable id %d not found", variableId);
+    }
+}
+
+- (NSUInteger)indexOfVariableWithId:(int)variableId
+{
+    NSUInteger index = 0;
     for (LUCVar *cvar in _variables)
     {
         if (cvar.actionId == variableId)
         {
-            return cvar;
+            return index;
         }
+        
+        ++index;
     }
     
-    return nil;
+    return NSNotFound;
+}
+
+- (LUCVar *)variableWithId:(int)variableId
+{
+    NSUInteger index = [self indexOfVariableWithId:variableId];
+    return index != NSNotFound ? _variables[index] : nil;
 }
 
 #pragma mark -

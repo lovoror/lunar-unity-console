@@ -90,18 +90,4 @@ NSString * const LUCVarTypeNameUnknown = @"Unknown";
     }
 }
 
-#pragma mark -
-#pragma mark Properties
-
-- (void)setValue:(NSString *)value
-{
-    if (_value != value)
-    {
-        LU_RELEASE(_value);
-        _value = LU_RETAIN(value);
-        
-        // TODO: notify delegates
-    }
-}
-
 @end

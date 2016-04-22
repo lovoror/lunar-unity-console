@@ -56,16 +56,10 @@ extern void UnitySendMessage(const char *objectName, const char *methodName, con
     LU_SUPER_DEALLOC
 }
 
-- (void)sendMessage:(NSString *)message
+- (void)sendMessageName:(NSString *)name params:(NSDictionary *)params
 {
-    if (message.length > 0)
-    {
-        UnitySendMessage(_targetName.UTF8String, _methodName.UTF8String, message.UTF8String);
-    }
-    else
-    {
-        NSLog(@"Can't send nil or empty message to %@.%@", _targetName, _methodName);
-    }
+    NSString *data = LUSerializeDictionaryToString(params);
+    UnitySendMessage(_targetName.UTF8String, _methodName.UTF8String, data.UTF8String);
 }
 
 @end

@@ -48,3 +48,21 @@ BOOL LUStringTryParseFloat(NSString *str, float *outResult)
     
     return NO;
 }
+
+NSString *LUSerializeDictionaryToString(NSDictionary *data)
+{
+    NSMutableString *result = [NSMutableString string];
+    NSInteger index = 0;
+    for (id key in data)
+    {
+        id value = [[data objectForKey:key] description];
+        value = [value stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]; // we use new lines as separators
+        [result appendFormat:@"%@:%@", key, value];
+        if (++index < data.count)
+        {
+            [result appendString:@"\n"];
+        }
+    }
+    
+    return result;
+}

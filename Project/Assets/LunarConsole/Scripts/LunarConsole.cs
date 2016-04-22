@@ -448,7 +448,7 @@ namespace LunarConsolePlugin
 
         void NativeMessageCallback(string param)
         {
-            IDictionary<string, string> data = ParseCallbackData(param);
+            IDictionary<string, string> data = StringUtils.DeserializeString(param);
             string name = data["name"];
             if (string.IsNullOrEmpty(name))
             {
@@ -520,23 +520,6 @@ namespace LunarConsolePlugin
             {
                 Debug.LogError("Can't change console variable: variableId is undefined");
             }
-        }
-
-        // TODO: extract into a separate class and add unit tests
-        static IDictionary<string, string> ParseCallbackData(string data)
-        {
-            // can't use Json here since Unity doesn't support Json-to-dictionary deserialization
-            // don't want to use 3rd party so custom format it is
-            string[] lines = data.Split('\n');
-            IDictionary<string, string> dict = new Dictionary<string, string>();
-            foreach (string line in lines)
-            {
-                int index = line.IndexOf(':');
-                string key = line.Substring(0, index);
-                string value = line.Substring(index + 1, line.Length - (index + 1)).Replace(@"\n", "\n"); // restore new lines
-                dict[key] = value;
-            }
-            return dict;
         }
 
         #endregion

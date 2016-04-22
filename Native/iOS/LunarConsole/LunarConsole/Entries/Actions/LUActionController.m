@@ -269,6 +269,12 @@ static const NSInteger kSectionCount = 2;
     [self updateNoActionWarningView];
 }
 
+- (void)actionRegistryFilter:(LUActionRegistryFilter *)registry didChangeVariable:(LUCVar *)variable atIndex:(NSUInteger)index
+{
+    NSArray *array = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:kSectionIndexVariables]];
+    [_tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+}
+
 #pragma mark -
 #pragma mark LUCVarTableViewCellDelegate
 

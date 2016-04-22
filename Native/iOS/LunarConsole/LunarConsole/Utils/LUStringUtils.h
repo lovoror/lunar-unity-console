@@ -10,3 +10,4 @@
 
 BOOL LUStringTryParseInteger(NSString *str, NSInteger *outResult);
 BOOL LUStringTryParseFloat(NSString *str, float *outResult);
+NSString *LUSerializeDictionaryToString(NSDictionary *data);

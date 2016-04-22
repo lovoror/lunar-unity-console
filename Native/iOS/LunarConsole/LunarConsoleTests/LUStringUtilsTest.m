@@ -79,4 +79,24 @@ inline static BOOL isEpsilonEqual(float a, float b)
     XCTAssertFalse(LUStringTryParseInteger(@"", &result));
 }
 
+#pragma mark -
+#pragma mark Serialization
+
+- (void)testDictionaryToStringSerialization
+{
+    NSDictionary *dict = @{
+       @"key1" : @"value",
+       @"key2" : @"value with whitespace",
+       @"key3" : @"value with\nlinebreak",
+       @"key4" : @"value with \"quotes\"",
+       @"key5" : @"value with: separator",
+       @"key6" : @""
+    };
+    
+    NSString *expected = @"key3:value with\\nlinebreak\nkey1:value\nkey6:\nkey4:value with \"quotes\"\nkey2:value with whitespace\nkey5:value with: separator";
+    NSString *actual = LUSerializeDictionaryToString(dict);
+    
+    XCTAssertEqualObjects(expected, actual);
+}
+
 @end

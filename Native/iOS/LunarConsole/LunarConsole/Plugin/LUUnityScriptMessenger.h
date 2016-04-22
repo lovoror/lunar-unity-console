@@ -12,6 +12,6 @@
 
 - (instancetype)initWithTargetName:(NSString *)targetName methodName:(NSString *)methodName;
 
-- (void)sendMessage:(NSString *)message;
+- (void)sendMessageName:(NSString *)name params:(NSDictionary *)params;
 
 @end

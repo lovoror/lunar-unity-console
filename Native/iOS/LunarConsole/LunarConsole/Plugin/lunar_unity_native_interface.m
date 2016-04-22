@@ -123,3 +123,12 @@ void __lunar_console_cvar_add(int entryId, const char *nameStr, const char *type
         LU_RELEASE(value);
     });
 }
+
+void __lunar_console_cvar_set(int entryId, const char *valueStr)
+{
+    lunar_dispatch_main(^{
+        NSString *value = [[NSString alloc] initWithUTF8String:valueStr];
+        [_lunarConsolePlugin setValue:value forVariableWithId:entryId];
+        LU_RELEASE(value);
+    });
+}
