@@ -23,7 +23,7 @@
 
 + (instancetype)controllerWithPlugin:(LUConsolePlugin *)consolePlugin
 {
-    return LU_AUTORELEASE([[self alloc] initWithPlugin:consolePlugin]);
+    return [[self alloc] initWithPlugin:consolePlugin];
 }
 
 - (instancetype)initWithPlugin:(LUConsolePlugin *)consolePlugin
@@ -68,12 +68,6 @@
     [self addChildController:_pageController];
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_pageController);
-    LU_RELEASE(_pageControllers);
-    LU_SUPER_DEALLOC
-}
 
 #pragma mark -
 #pragma mark Controllers

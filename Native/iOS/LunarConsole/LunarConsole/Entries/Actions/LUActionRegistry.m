@@ -21,7 +21,7 @@
 
 + (instancetype)registry
 {
-    return LU_AUTORELEASE([[self alloc] init]);
+    return [[self alloc] init];
 }
 
 - (instancetype)init
@@ -35,12 +35,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_actions);
-    LU_RELEASE(_variables);
-    LU_SUPER_DEALLOC
-}
 
 #pragma mark -
 #pragma mark Actions
@@ -65,7 +59,7 @@
         LUAction *action = _actions[actionIndex];
         if (action.actionId == actionId)
         {
-            action = LU_AUTORELEASE(LU_RETAIN(action)); // no matter what they say, I still love you, MRC!
+            action = action; // no matter what they say, I still love you, MRC!
             [_actions removeObjectAtIndex:actionIndex];
             
             [_delegate actionRegistry:self didRemoveAction:action atIndex:actionIndex];

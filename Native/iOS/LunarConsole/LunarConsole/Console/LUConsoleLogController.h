@@ -27,7 +27,7 @@
 
 @interface LUConsoleLogController : LUViewController
 
-@property (nonatomic, retain) NSString *version;
+@property (nonatomic, strong) NSString *version;
 
 + (instancetype)controllerWithConsole:(LUConsole *)console;
 - (instancetype)initWithConsole:(LUConsole *)console;

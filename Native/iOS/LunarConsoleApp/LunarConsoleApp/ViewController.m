@@ -31,7 +31,7 @@ static const NSUInteger kConsoleTrimCount = 512;
 static const CGFloat kActionOverlayViewWidth = 186.0;
 static const CGFloat kActionOverlayViewHeight = 47.0;
 
-static __weak LUConsolePlugin * _pluginInstance;
+static LU_WEAK LUConsolePlugin * _pluginInstance;
 
 void UnitySendMessage(const char *objectName, const char *methodName, const char *message)
 {
@@ -57,8 +57,6 @@ void UnitySendMessage(const char *objectName, const char *methodName, const char
 - (void)dealloc
 {
     _pluginInstance = nil;
-    LU_RELEASE(_plugin);
-    LU_SUPER_DEALLOC
 }
 
 - (void)viewDidLoad
@@ -186,7 +184,6 @@ void UnitySendMessage(const char *objectName, const char *methodName, const char
     );
     ActionOverlayView *overlayView = [[ActionOverlayView alloc] initWithFrame:frame];
     [window addSubview:overlayView];
-    LU_RELEASE(overlayView);
 }
 
 - (void)removeOverlayViewFromWindow:(UIWindow *)window
@@ -265,7 +262,6 @@ void UnitySendMessage(const char *objectName, const char *methodName, const char
         
         FakeLogEntry *entry = [[FakeLogEntry alloc] initWithType:type message:message stackTrace:stacktrace];
         [entries addObject:entry];
-        LU_RELEASE(entry);
     }
     return entries;
 }

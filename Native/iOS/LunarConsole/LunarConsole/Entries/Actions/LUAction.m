@@ -14,7 +14,7 @@
 
 + (instancetype)actionWithId:(int)actionId name:(NSString *)name
 {
-    return LU_AUTORELEASE([[self alloc] initWithId:actionId name:name]);
+    return [[self alloc] initWithId:actionId name:name];
 }
 
 @end

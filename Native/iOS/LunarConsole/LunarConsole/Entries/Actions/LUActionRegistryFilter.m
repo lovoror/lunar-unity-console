@@ -24,7 +24,7 @@
 
 + (instancetype)filterWithActionRegistry:(LUActionRegistry *)actionRegistry
 {
-    return LU_AUTORELEASE([[self alloc] initWithActionRegistry:actionRegistry]);
+    return [[self alloc] initWithActionRegistry:actionRegistry];
 }
 
 - (instancetype)initWithActionRegistry:(LUActionRegistry *)actionRegistry
@@ -32,7 +32,7 @@
     self = [super init];
     if (self)
     {
-        _registry = LU_RETAIN(actionRegistry);
+        _registry = actionRegistry;
         _registry.delegate = self;
     }
     return self;
@@ -45,11 +45,6 @@
         _registry.delegate = nil;
     }
     
-    LU_RELEASE(_registry);
-    LU_RELEASE(_filteredActions);
-    LU_RELEASE(_filteredVariables);
-    LU_RELEASE(_filterText);
-    LU_SUPER_DEALLOC
 }
 
 #pragma mark -
@@ -59,10 +54,9 @@
 {
     if (_filterText != filterText) // filter text has changed
     {
-        NSString *oldFilterText = LU_AUTORELEASE(LU_RETAIN(_filterText)); // manual reference counting rocks!
+        NSString *oldFilterText = _filterText; // manual reference counting rocks!
         
-        LU_RELEASE(_filterText);
-        _filterText = LU_RETAIN(filterText);
+        _filterText = filterText;
         
         if (filterText.length > oldFilterText.length && (oldFilterText.length == 0 || [filterText hasPrefix:oldFilterText])) // added more characters
         {
@@ -196,7 +190,7 @@
             return;
         }
         
-        action = LU_AUTORELEASE(LU_RETAIN([_filteredActions objectAtIndex:index]));
+        action = [_filteredActions objectAtIndex:index];
         [_filteredActions removeObjectAtIndex:index];
     }
     

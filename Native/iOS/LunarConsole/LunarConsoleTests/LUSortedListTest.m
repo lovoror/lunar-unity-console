@@ -30,7 +30,7 @@
 
 - (void)tearDown
 {
-    LU_RELEASE(_list);
+    [_list release];
     [super tearDown];
 }
 

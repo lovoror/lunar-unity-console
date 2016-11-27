@@ -63,7 +63,7 @@ static UIEdgeInsets _messageInsets;
 
 + (instancetype)cellWithFrame:(CGRect)frame reuseIdentifier:(nullable NSString *)reuseIdentifier
 {
-    return LU_AUTORELEASE([[[self class] alloc] initWithFrame:frame reuseIdentifier:reuseIdentifier]);
+    return [[[self class] alloc] initWithFrame:frame reuseIdentifier:reuseIdentifier];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame reuseIdentifier:(nullable NSString *)reuseIdentifier
@@ -104,12 +104,6 @@ static UIEdgeInsets _messageInsets;
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_messageLabel);
-    LU_RELEASE(_iconView);
-    LU_SUPER_DEALLOC
-}
 
 - (void)setSize:(CGSize)size
 {
@@ -230,12 +224,6 @@ static UIEdgeInsets _messageInsets;
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_backgroundImageView);
-    LU_RELEASE(_countLabel);
-    LU_SUPER_DEALLOC
-}
 
 - (void)setSize:(CGSize)size
 {

@@ -29,11 +29,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_array);
-    LU_SUPER_DEALLOC
-}
 
 #pragma mark -
 #pragma mark Objects

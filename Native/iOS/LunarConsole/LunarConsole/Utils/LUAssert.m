@@ -51,8 +51,6 @@ void __lunar_assert_msgv(const char* expressionCStr, const char* fileCStr, int l
         _assertHandler(consoleMessage);
     }
     
-    LU_RELEASE(message);
-    LU_RELEASE(consoleMessage);
     
     va_end(ap);
 }
@@ -61,7 +59,6 @@ void LUAssertSetHandler(LUAssertHandler handler)
 {
     if (_assertHandler != handler)
     {
-        LU_RELEASE(_assertHandler);
         _assertHandler = [handler copy];
     }
 }

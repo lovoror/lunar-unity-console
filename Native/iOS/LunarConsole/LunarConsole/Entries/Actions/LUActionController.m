@@ -19,10 +19,10 @@ static const NSInteger kSectionCount = 2;
     LUActionRegistryFilter * _actionRegistryFilter;
 }
 
-@property (nonatomic, assign) IBOutlet UIView       * noActionsWarningView;
-@property (nonatomic, assign) IBOutlet UILabel      * noActionsWarningLabel;
-@property (nonatomic, assign) IBOutlet UITableView  * tableView;
-@property (nonatomic, assign) IBOutlet UISearchBar  * filterBar;
+@property (nonatomic, weak) IBOutlet UIView       * noActionsWarningView;
+@property (nonatomic, weak) IBOutlet UILabel      * noActionsWarningLabel;
+@property (nonatomic, weak) IBOutlet UITableView  * tableView;
+@property (nonatomic, weak) IBOutlet UISearchBar  * filterBar;
 
 @end
 
@@ -30,7 +30,7 @@ static const NSInteger kSectionCount = 2;
 
 + (instancetype)controllerWithActionRegistry:(LUActionRegistry *)actionRegistry
 {
-    return LU_AUTORELEASE([[self alloc] initWithActionRegistry:actionRegistry]);
+    return [[self alloc] initWithActionRegistry:actionRegistry];
 }
 
 - (instancetype)initWithActionRegistry:(LUActionRegistry *)actionRegistry
@@ -42,7 +42,6 @@ static const NSInteger kSectionCount = 2;
         {
             NSLog(@"Can't create action controller: action register is nil");
             
-            LU_RELEASE(self);
             self = nil;
             return nil;
         }
@@ -53,11 +52,6 @@ static const NSInteger kSectionCount = 2;
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_actionRegistryFilter);
-    LU_SUPER_DEALLOC
-}
 
 - (void)viewDidLoad
 {
@@ -89,7 +83,7 @@ static const NSInteger kSectionCount = 2;
 //    // "status bar" view
 //    UITapGestureRecognizer *statusBarTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self                                                                                                    action:@selector(onStatusBarTap:)];
 //    [_statusBarView addGestureRecognizer:statusBarTapGestureRecognizer];
-//    LU_RELEASE(statusBarTapGestureRecognizer);
+//    [statusBarTapGestureRecognizer release];
 //    
 //    _statusBarView.text = [NSString stringWithFormat:@"Lunar Console v%@", _version ? _version : @"?.?.?"];
     

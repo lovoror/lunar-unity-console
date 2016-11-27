@@ -33,7 +33,7 @@
 - (void)tearDown
 {
     [super tearDown];
-    LU_RELEASE(_actionRegistry);
+    [_actionRegistry release];
 }
 
 #pragma mark -

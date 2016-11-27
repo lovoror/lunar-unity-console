@@ -11,7 +11,7 @@
 @interface LUSortedList : NSObject<NSFastEnumeration>
 
 @property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, readonly, nonnull) NSArray *innerArray;
+@property (weak, nonatomic, readonly, nonnull) NSArray *innerArray;
 
 - (nonnull id)objectAtIndex:(NSUInteger)index;
 - (nonnull id)objectAtIndexedSubscript:(NSUInteger)index;

@@ -23,10 +23,10 @@
 
 @interface LUActionRegistry : NSObject
 
-@property (nonatomic, readonly) NSArray *actions;
-@property (nonatomic, readonly) NSArray *variables;
+@property (weak, nonatomic, readonly) NSArray *actions;
+@property (weak, nonatomic, readonly) NSArray *variables;
 
-@property (nonatomic, assign) id<LUActionRegistryDelegate> delegate;
+@property (nonatomic, weak) id<LUActionRegistryDelegate> delegate;
 
 + (instancetype)registry;
 

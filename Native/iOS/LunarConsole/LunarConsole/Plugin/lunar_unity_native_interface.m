@@ -45,17 +45,12 @@ void __lunar_console_initialize(const char *targetNameStr, const char *methodNam
                                                                   gestureName:gesture];
             [_lunarConsolePlugin enableGestureRecognition];
             
-            LU_RELEASE(targetName);
-            LU_RELEASE(methodName);
-            LU_RELEASE(version);
-            LU_RELEASE(gesture);
         }
     });
 }
 
 void __lunar_console_destroy() {
     lunar_dispatch_main(^{
-        LU_RELEASE(_lunarConsolePlugin);
         _lunarConsolePlugin = nil;
     });
 }
@@ -91,8 +86,6 @@ void __lunar_console_log_message(const char * messageStr, const char * stackTrac
 
     [_lunarConsolePlugin logMessage:message stackTrace:stackTrace type:type];
     
-    LU_RELEASE(message);
-    LU_RELEASE(stackTrace);
 }
 
 void __lunar_console_action_add(int actionId, const char *actionNameStr)
@@ -101,7 +94,6 @@ void __lunar_console_action_add(int actionId, const char *actionNameStr)
     lunar_dispatch_main(^{
         [_lunarConsolePlugin registerActionWithId:actionId name:actionName];
     });
-    LU_RELEASE(actionName);
 }
 
 void __lunar_console_action_remove(int actionId)
@@ -118,9 +110,6 @@ void __lunar_console_cvar_add(int entryId, const char *nameStr, const char *type
         NSString *type = [[NSString alloc] initWithUTF8String:typeStr];
         NSString *value = [[NSString alloc] initWithUTF8String:valueStr];
         [_lunarConsolePlugin registerVariableWithId:entryId name:name type:type value:value];
-        LU_RELEASE(name);
-        LU_RELEASE(type);
-        LU_RELEASE(value);
     });
 }
 
@@ -129,6 +118,5 @@ void __lunar_console_cvar_set(int entryId, const char *valueStr)
     lunar_dispatch_main(^{
         NSString *value = [[NSString alloc] initWithUTF8String:valueStr];
         [_lunarConsolePlugin setValue:value forVariableWithId:entryId];
-        LU_RELEASE(value);
     });
 }

@@ -12,18 +12,13 @@
 
 @interface LUCVarInputTableViewCell () <UITextFieldDelegate>
 
-@property (nonatomic, assign) IBOutlet UITextField * inputField;
+@property (nonatomic, weak) IBOutlet UITextField * inputField;
 @property (nonatomic, strong) NSString * lastValue;
 
 @end
 
 @implementation LUCVarInputTableViewCell
 
-- (void)dealloc
-{
-    LU_RELEASE(_lastValue);
-    LU_SUPER_DEALLOC
-}
 
 #pragma mark -
 #pragma mark Inheritance

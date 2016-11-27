@@ -35,11 +35,5 @@
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_message);
-    LU_RELEASE(_stacktrace);
-    LU_SUPER_DEALLOC
-}
 
 @end

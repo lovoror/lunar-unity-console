@@ -41,7 +41,7 @@
 
 @interface LUConsoleLogMenuController : LUViewController
 
-@property (nonatomic, assign) id<LUConsoleMenuControllerDelegate> delegate;
+@property (nonatomic, weak) id<LUConsoleMenuControllerDelegate> delegate;
 
 - (void)addButtonTitle:(NSString *)title target:(id)target action:(SEL)action;
 

@@ -25,25 +25,25 @@
 
 + (instancetype)cellSkin;
 
-@property (nonatomic, readonly) UIImage *icon;
-@property (nonatomic, readonly) UIColor *textColor;
-@property (nonatomic, readonly) UIColor *backgroundColorLight;
-@property (nonatomic, readonly) UIColor *backgroundColorDark;
+@property (weak, nonatomic, readonly) UIImage *icon;
+@property (weak, nonatomic, readonly) UIColor *textColor;
+@property (weak, nonatomic, readonly) UIColor *backgroundColorLight;
+@property (weak, nonatomic, readonly) UIColor *backgroundColorDark;
 
 @end
 
 @interface LUTheme : NSObject
 
-@property (nonatomic, readonly) UIColor *tableColor;
-@property (nonatomic, readonly) UIColor *logButtonTitleColor;
-@property (nonatomic, readonly) UIColor *logButtonTitleSelectedColor;
+@property (weak, nonatomic, readonly) UIColor *tableColor;
+@property (weak, nonatomic, readonly) UIColor *logButtonTitleColor;
+@property (weak, nonatomic, readonly) UIColor *logButtonTitleSelectedColor;
 
-@property (nonatomic, readonly) LUCellSkin *cellLog;
-@property (nonatomic, readonly) LUCellSkin *cellError;
-@property (nonatomic, readonly) LUCellSkin *cellWarning;
+@property (weak, nonatomic, readonly) LUCellSkin *cellLog;
+@property (weak, nonatomic, readonly) LUCellSkin *cellError;
+@property (weak, nonatomic, readonly) LUCellSkin *cellWarning;
 
-@property (nonatomic, readonly) UIFont *font;
-@property (nonatomic, readonly) UIFont *fontSmall;
+@property (weak, nonatomic, readonly) UIFont *font;
+@property (weak, nonatomic, readonly) UIFont *fontSmall;
 @property (nonatomic, readonly) NSLineBreakMode lineBreakMode;
 
 @property (nonatomic, readonly) CGFloat cellHeight;
@@ -52,24 +52,24 @@
 @property (nonatomic, readonly) CGFloat buttonWidth;
 @property (nonatomic, readonly) CGFloat buttonHeight;
 
-@property (nonatomic, readonly) UIImage *collapseBackgroundImage;
-@property (nonatomic, readonly) UIColor *collapseBackgroundColor;
-@property (nonatomic, readonly) UIColor *collapseTextColor;
+@property (weak, nonatomic, readonly) UIImage *collapseBackgroundImage;
+@property (weak, nonatomic, readonly) UIColor *collapseBackgroundColor;
+@property (weak, nonatomic, readonly) UIColor *collapseTextColor;
 
-@property (nonatomic, readonly) UIFont  *actionsWarningFont;
-@property (nonatomic, readonly) UIColor *actionsWarningTextColor;
-@property (nonatomic, readonly) UIFont  *actionsFont;
-@property (nonatomic, readonly) UIColor *actionsTextColor;
-@property (nonatomic, readonly) UIColor *actionsBackgroundColorLight;
-@property (nonatomic, readonly) UIColor *actionsBackgroundColorDark;
-@property (nonatomic, readonly) UIFont  *actionsGroupFont;
-@property (nonatomic, readonly) UIColor *actionsGroupTextColor;
-@property (nonatomic, readonly) UIColor *actionsGroupBackgroundColor;
+@property (weak, nonatomic, readonly) UIFont  *actionsWarningFont;
+@property (weak, nonatomic, readonly) UIColor *actionsWarningTextColor;
+@property (weak, nonatomic, readonly) UIFont  *actionsFont;
+@property (weak, nonatomic, readonly) UIColor *actionsTextColor;
+@property (weak, nonatomic, readonly) UIColor *actionsBackgroundColorLight;
+@property (weak, nonatomic, readonly) UIColor *actionsBackgroundColorDark;
+@property (weak, nonatomic, readonly) UIFont  *actionsGroupFont;
+@property (weak, nonatomic, readonly) UIColor *actionsGroupTextColor;
+@property (weak, nonatomic, readonly) UIColor *actionsGroupBackgroundColor;
 
-@property (nonatomic, readonly) UIFont  *contextMenuFont;
-@property (nonatomic, readonly) UIColor *contextMenuBackgroundColor;
-@property (nonatomic, readonly) UIColor *contextMenuTextColor;
-@property (nonatomic, readonly) UIColor *contextMenuTextHighlightColor;
+@property (weak, nonatomic, readonly) UIFont  *contextMenuFont;
+@property (weak, nonatomic, readonly) UIColor *contextMenuBackgroundColor;
+@property (weak, nonatomic, readonly) UIColor *contextMenuTextColor;
+@property (weak, nonatomic, readonly) UIColor *contextMenuTextHighlightColor;
 
 + (LUTheme *)mainTheme;
 

@@ -38,22 +38,22 @@ static LUConsoleLogControllerState * _sharedControllerState;
     LUConsole * _console;
 }
 
-@property (nonatomic, assign) IBOutlet UILabel * statusBarView;
-@property (nonatomic, assign) IBOutlet UILabel * overflowWarningLabel;
+@property (nonatomic, weak) IBOutlet UILabel * statusBarView;
+@property (nonatomic, weak) IBOutlet UILabel * overflowWarningLabel;
 
-@property (nonatomic, assign) IBOutlet LUTableView * tableView;
-@property (nonatomic, assign) IBOutlet UISearchBar * filterBar;
+@property (nonatomic, weak) IBOutlet LUTableView * tableView;
+@property (nonatomic, weak) IBOutlet UISearchBar * filterBar;
 
-@property (nonatomic, assign) IBOutlet LUConsoleLogTypeButton * logButton;
-@property (nonatomic, assign) IBOutlet LUConsoleLogTypeButton * warningButton;
-@property (nonatomic, assign) IBOutlet LUConsoleLogTypeButton * errorButton;
+@property (nonatomic, weak) IBOutlet LUConsoleLogTypeButton * logButton;
+@property (nonatomic, weak) IBOutlet LUConsoleLogTypeButton * warningButton;
+@property (nonatomic, weak) IBOutlet LUConsoleLogTypeButton * errorButton;
 
-@property (nonatomic, assign) IBOutlet LUToggleButton  * toggleCollapseButton;
-@property (nonatomic, assign) IBOutlet LUToggleButton  * scrollLockButton;
+@property (nonatomic, weak) IBOutlet LUToggleButton  * toggleCollapseButton;
+@property (nonatomic, weak) IBOutlet LUToggleButton  * scrollLockButton;
 
-@property (nonatomic, assign) IBOutlet NSLayoutConstraint * lastToolbarButtonTrailingConstraint;
-@property (nonatomic, assign) IBOutlet NSLayoutConstraint * lastToolbarButtonTrailingConstraintCompact;
-@property (nonatomic, assign) IBOutlet NSLayoutConstraint * overflowLabelHeightConstraint;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint * lastToolbarButtonTrailingConstraint;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint * lastToolbarButtonTrailingConstraintCompact;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint * overflowLabelHeightConstraint;
 
 @property (nonatomic, assign) BOOL scrollLocked;
 
@@ -78,7 +78,7 @@ static LUConsoleLogControllerState * _sharedControllerState;
 
 + (instancetype)controllerWithConsole:(LUConsole *)console
 {
-    return LU_AUTORELEASE([[[self class] alloc] initWithConsole:console]);
+    return [[[self class] alloc] initWithConsole:console];
 }
 
 - (instancetype)initWithConsole:(LUConsole *)console
@@ -86,7 +86,7 @@ static LUConsoleLogControllerState * _sharedControllerState;
     self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
     if (self)
     {
-        _console = LU_RETAIN(console);
+        _console = console;
     }
     return self;
 }
@@ -102,9 +102,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     _warningButton.delegate = nil;
     _errorButton.delegate   = nil;
 
-    LU_RELEASE(_version);
-    LU_RELEASE(_console);
-    LU_SUPER_DEALLOC
 }
 
 - (void)viewDidLoad
@@ -142,7 +139,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     UITapGestureRecognizer *statusBarTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                              action:@selector(onStatusBarTap:)];
     [_statusBarView addGestureRecognizer:statusBarTapGestureRecognizer];
-    LU_RELEASE(statusBarTapGestureRecognizer);
     
     _statusBarView.text = [NSString stringWithFormat:@"Lunar Console v%@", _version ? _version : @"?.?.?"];
     
@@ -259,7 +255,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     {
         [self presentViewController:controller animated:YES completion:nil];
     }
-    LU_RELEASE(controller);
 }
 
 - (IBAction)onStatusBarTap:(UITapGestureRecognizer *)recognizer
@@ -287,7 +282,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     // add as child view controller
     [self addChildOverlayController:controller animated:NO];
     
-    LU_RELEASE(controller);
 }
 
 #pragma mark -
@@ -435,7 +429,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     // add as child view controller
     [self addChildOverlayController:controller animated:YES];
     
-    LU_RELEASE(controller);
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -636,7 +629,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     {
         NSArray *deleteIndices = [[NSArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil];
         [_tableView deleteRowsAtIndexPaths:deleteIndices withRowAnimation:UITableViewRowAnimationNone];
-        LU_RELEASE(deleteIndices);
     }
     else if (count > 1)
     {
@@ -646,7 +638,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
             [deleteIndices addObject:[NSIndexPath indexPathForRow:rowIndex inSection:0]];
         }
         [_tableView deleteRowsAtIndexPaths:deleteIndices withRowAnimation:UITableViewRowAnimationNone];
-        LU_RELEASE(deleteIndices);
     }
 }
 
@@ -656,7 +647,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     
     NSArray *indices = [[NSArray alloc] initWithObjects:[NSIndexPath indexPathForRow:index inSection:0], nil];
     [_tableView insertRowsAtIndexPaths:indices withRowAnimation:UITableViewRowAnimationNone];
-    LU_RELEASE(indices);
 
     // scroll to end
     if (_scrollLocked)
@@ -671,7 +661,6 @@ static LUConsoleLogControllerState * _sharedControllerState;
     
     NSArray *indices = [[NSArray alloc] initWithObjects:[NSIndexPath indexPathForRow:index inSection:0], nil];
     [_tableView reloadRowsAtIndexPaths:indices withRowAnimation:UITableViewRowAnimationNone];
-    LU_RELEASE(indices);
 }
 
 - (void)updateEntriesCount

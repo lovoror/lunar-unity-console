@@ -66,8 +66,8 @@ static int _nextActionId;
 {
     [super tearDown];
     
-    LU_RELEASE(_actionRegistry);
-    LU_RELEASE(_registryFilter);
+    [_actionRegistry release];
+    [_registryFilter release];
 }
 
 #pragma mark -
@@ -538,15 +538,15 @@ static LUActionRegistryFilter *createFilter(LUEntryInfo *first, ...)
     self = [super init];
     if (self)
     {
-        _name = LU_RETAIN(name);
+        _name = [name retain];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    LU_RELEASE(_name);
-    LU_SUPER_DEALLOC
+    [_name release];
+    [super dealloc];
 }
 
 - (BOOL)isEqualToEntry:(LUEntry *)entry
@@ -560,7 +560,7 @@ static LUActionRegistryFilter *createFilter(LUEntryInfo *first, ...)
 
 + (instancetype)actionWithName:(NSString *)name
 {
-    return LU_AUTORELEASE([[self alloc] initWithName:name]);
+    return [[[self alloc] initWithName:name] autorelease];
 }
 
 - (BOOL)isEqualToEntry:(LUEntry *)entry
@@ -574,7 +574,7 @@ static LUActionRegistryFilter *createFilter(LUEntryInfo *first, ...)
 
 + (instancetype)variableWithName:(NSString *)name value:(NSString *)value type:(NSString *)type
 {
-    return LU_AUTORELEASE([[self alloc] initWithName:name value:value type:type]);
+    return [[[self alloc] initWithName:name value:value type:type] autorelease];
 }
 
 - (instancetype)initWithName:(NSString *)name value:(NSString *)value type:(NSString *)type
@@ -582,17 +582,17 @@ static LUActionRegistryFilter *createFilter(LUEntryInfo *first, ...)
     self = [super initWithName:name];
     if (self)
     {
-        _value = LU_RETAIN(value);
-        _type = LU_RETAIN(type);
+        _value = [value retain];
+        _type = [type retain];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    LU_RELEASE(_value);
-    LU_RELEASE(_type);
-    LU_SUPER_DEALLOC
+    [_value release];
+    [_type release];
+    [super dealloc];
 }
 
 - (BOOL)isEqualToEntry:(LUEntry *)entry

@@ -14,7 +14,7 @@
 
 + (instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier
 {
-    return LU_AUTORELEASE([[[self class] alloc] initWithReuseIdentifier:reuseIdentifier]);
+    return [[[self class] alloc] initWithReuseIdentifier:reuseIdentifier];
 }
 
 - (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier

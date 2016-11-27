@@ -29,7 +29,7 @@
 {
     [super setUp];
     
-    LU_RELEASE(_result);
+    [_result release];
     _result = [NSMutableArray new];
     
     LUAssertSetHandler(^(NSString *message) {

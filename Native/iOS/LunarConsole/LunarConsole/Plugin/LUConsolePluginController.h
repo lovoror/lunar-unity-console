@@ -22,7 +22,7 @@
 
 @interface LUConsolePluginController : LUViewController
 
-@property (nonatomic, assign) id<LUConsolePluginControllerDelegate> delegate;
+@property (nonatomic, weak) id<LUConsolePluginControllerDelegate> delegate;
 
 + (instancetype)controllerWithPlugin:(LUConsolePlugin *)consolePlugin;
 - (instancetype)initWithPlugin:(LUConsolePlugin *)consolePlugin;

@@ -57,7 +57,6 @@ typedef void (^InputCallback)(NSString *input);
     }];
     alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alertView show];
-    LU_RELEASE(alertView);
 }
 
 #pragma mark -

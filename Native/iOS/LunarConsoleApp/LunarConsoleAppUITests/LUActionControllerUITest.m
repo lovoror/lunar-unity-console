@@ -443,7 +443,6 @@
     NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
     NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [self app:app alertWithName:@"Lunar" enterText:json];
-    LU_RELEASE(json);
 }
 
 - (void)app:(XCUIApplication *)app removeActions:(NSArray *)actions
@@ -453,7 +452,6 @@
     NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
     NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [self app:app alertWithName:@"Lunar" enterText:json];
-    LU_RELEASE(json);
 }
 
 - (void)app:(XCUIApplication *)app removeGroups:(NSArray *)actions
@@ -463,7 +461,6 @@
     NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
     NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [self app:app alertWithName:@"Lunar" enterText:json];
-    LU_RELEASE(json);
 }
 
 - (void)app:(XCUIApplication *)app alertWithName:(NSString *)alertName enterText:(NSString *)text

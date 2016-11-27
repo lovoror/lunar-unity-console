@@ -27,7 +27,7 @@ NSString * const LUCVarTypeNameUnknown = @"Unknown";
 
 + (instancetype)variableWithId:(int)entryId name:(NSString *)name value:(NSString *)value type:(LUCVarType)type cellClass:(Class)cellClass
 {
-    return LU_AUTORELEASE([[self alloc] initWithId:entryId name:name value:value type:type cellClass:cellClass]);
+    return [[self alloc] initWithId:entryId name:name value:value type:type cellClass:cellClass];
 }
 
 - (instancetype)initWithId:(int)entryId name:(NSString *)name value:(NSString *)value type:(LUCVarType)type cellClass:(Class)cellClass
@@ -35,7 +35,7 @@ NSString * const LUCVarTypeNameUnknown = @"Unknown";
     self = [super initWithId:entryId name:name];
     if (self)
     {
-        _value = LU_RETAIN(value);
+        _value = value;
         _cellClass = cellClass;
         _type = type;
     }
@@ -44,8 +44,7 @@ NSString * const LUCVarTypeNameUnknown = @"Unknown";
 
 - (void)dealloc
 {
-    LU_RELEASE(_value);
-    LU_SUPER_DEALLOC;
+    ;
 }
 
 #pragma mark -
@@ -57,7 +56,7 @@ NSString * const LUCVarTypeNameUnknown = @"Unknown";
     LUCVarTableViewCell *cell = (LUCVarTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil)
     {
-        cell = LU_AUTORELEASE([[_cellClass alloc] initWithReuseIdentifier:identifier]);
+        cell = [[_cellClass alloc] initWithReuseIdentifier:identifier];
     }
     
     [cell setupVariable:self];

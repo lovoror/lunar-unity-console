@@ -28,11 +28,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    LU_RELEASE(_completion);
-    LU_SUPER_DEALLOC
-}
 
 #pragma mark -
 #pragma mark UIAlertViewDelegate

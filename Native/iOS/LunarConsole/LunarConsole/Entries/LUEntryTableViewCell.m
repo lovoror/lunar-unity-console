@@ -14,7 +14,7 @@
 
 + (instancetype)cellWithFrame:(CGRect)frame reuseIdentifier:(nullable NSString *)reuseIdentifier
 {
-    return LU_AUTORELEASE([[[self class] alloc] initWithFrame:frame reuseIdentifier:reuseIdentifier]);
+    return [[[self class] alloc] initWithFrame:frame reuseIdentifier:reuseIdentifier];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame reuseIdentifier:(nullable NSString *)reuseIdentifier
